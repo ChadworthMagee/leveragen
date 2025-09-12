@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leveragen | Series A Investor Pitch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative dashboard, guiding investors through the investment thesis. It starts with a strong hook (the problem & solution), presents the market opportunity with data, details the unique technology, showcases traction with interactive filters, outlines the competitive advantage, and concludes with the financial ask and use of funds. This structure is more engaging than a static deck, allowing non-linear exploration via a sticky nav while maintaining a clear, persuasive flow. Interactions like filtering campaigns and hovering for details are designed to provide depth without overwhelming the user, fostering a sense of discovery and reinforcing the platform's robustness. -->
+    <!-- Visualization & Content Choices: 
+        1. Antibody Market Growth: Report Info -> Global antibody market size/projection. Goal -> Show market opportunity. Viz -> Bar Chart (Chart.js). Interaction -> Hover tooltips for specific year data. Justification -> A bar chart clearly visualizes year-over-year growth, making the opportunity tangible.
+        2. Use of Funds: Report Info -> $15M ask allocation. Goal -> Demonstrate financial prudence. Viz -> Donut Chart (Chart.js). Interaction -> Hover to see percentage and category. Justification -> A donut chart is the standard, intuitive way to show parts of a whole for budget allocation.
+        3. Technology Comparison: Report Info -> Leveragen vs. Llama VHH process. Goal -> Differentiate the technology. Presentation -> HTML/CSS side-by-side diagram. Interaction -> Key steps highlighted with color. Justification -> A visual process flow is far clearer than text for comparing complex scientific workflows.
+        4. Discovery Campaigns: Report Info -> 20+ successful campaigns. Goal -> Prove platform productivity. Presentation -> Filterable card grid. Interaction -> Click buttons to filter by therapeutic area (Oncology, Autoimmune, Infectious Disease). Justification -> An interactive filter proves the platform's breadth and success across multiple high-value areas, providing compelling evidence of traction.
+        5. Modality Fit: Report Info -> sdAb utility in CAR-T, mRNA, etc. Goal -> Show platform versatility. Presentation -> HTML/CSS hub-and-spoke diagram. Interaction -> Hover over modalities for info. Justification -> This visually demonstrates that Leveragen's technology is not a single product but a foundational component for next-gen therapeutics.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #1a202c;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #3E92CC;
+            border-bottom-color: #3E92CC;
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .btn-filter {
+            transition: all 0.3s ease;
+        }
+        .btn-filter.active {
+            background-color: #0A2463;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold text-[#0A2463]">Leveragen</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#opportunity" class="nav-link font-medium text-gray-600 pb-1">Opportunity</a>
+                <a href="#solution" class="nav-link font-medium text-gray-600 pb-1">Solution</a>
+                <a href="#traction" class="nav-link font-medium text-gray-600 pb-1">Traction</a>
+                <a href="#market-fit" class="nav-link font-medium text-gray-600 pb-1">Market Fit</a>
+                <a href="#ask" class="nav-link font-medium text-gray-600 pb-1">The Ask</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-[#0A2463] leading-tight">Engineering the Future of Antibody Therapeutics</h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">Leveragen's proprietary mouse platform delivers fully human single-domain antibodies, unlocking next-generation biologics with unprecedented speed and scalability.</p>
+                <div class="mt-8">
+                    <div class="inline-block bg-[#D89216] text-white font-bold text-xl py-4 px-8 rounded-lg shadow-lg">
+                        Seeking $15M in Series A Funding
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="opportunity" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#0A2463]">A Surging Market with Unmet Needs</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">The antibody therapeutics market is experiencing explosive growth, yet significant challenges in developability and immunogenicity remain. This section outlines the massive commercial opportunity for a superior antibody platform.</p>
+                </div>
+                
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-12">
+                     <h3 class="text-xl font-semibold text-center text-[#0A2463] mb-4">Global Antibody Therapeutics Market Growth (USD Billions)</h3>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-[#3E92CC]">$300B+</p>
+                        <p class="mt-2 text-lg font-semibold text-gray-800">Projected Market by 2028</p>
+                        <p class="mt-1 text-gray-600">Driven by oncology, autoimmune, and novel modalities.</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-[#3E92CC]">15-20%</p>
+                        <p class="mt-2 text-lg font-semibold text-gray-800">Failure Rate in Development</p>
+                        <p class="mt-1 text-gray-600">Often due to immunogenicity and manufacturing issues from non-human origins.</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-[#3E92CC]">The sdAb Advantage</p>
+                        <p class="mt-2 text-lg font-semibold text-gray-800">Urgent Need for Better Scaffolds</p>
+                        <p class="mt-1 text-gray-600">Single-domain antibodies offer stability, size, and targeting advantages, if immunogenicity can be solved.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#0A2463]">The Leveragen Platform: A Paradigm Shift</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">We have engineered a revolutionary solution that bypasses the limitations of traditional methods. Our platform generates fully human single-domain antibodies directly from our proprietary mouse models, eliminating the need for risky and time-consuming humanization.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-gray-100 p-6 rounded-lg border border-gray-200">
+                        <h3 class="text-xl font-bold text-center text-gray-700">Traditional Llama VHH Approach</h3>
+                        <div class="mt-6 space-y-4">
+                            <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
+                                <div class="bg-red-100 text-red-700 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">1</div>
+                                <div><p class="font-semibold">Immunize Llama</p><p class="text-sm text-gray-600">Non-human starting point.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
+                                <div class="bg-red-100 text-red-700 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">2</div>
+                                <div><p class="font-semibold">Isolate VHH Fragments</p><p class="text-sm text-gray-600">Initial discovery phase.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
+                                <div class="bg-red-100 text-red-700 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">3</div>
+                                <div><p class="font-semibold text-red-600">Complex Humanization</p><p class="text-sm text-gray-600">Time-consuming, expensive, and high risk of losing affinity or introducing immunogenicity.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
+                                <div class="bg-red-100 text-red-700 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">4</div>
+                                <div><p class="font-semibold">Final Candidate</p><p class="text-sm text-gray-600">Lingering immunogenicity risk.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#0A2463] text-white p-6 rounded-lg border border-blue-800 shadow-2xl">
+                        <h3 class="text-xl font-bold text-center text-white">The Leveragen Mouse sdAb Platform</h3>
+                         <div class="mt-6 space-y-4">
+                            <div class="flex items-center p-3 bg-blue-900/50 rounded-md">
+                                <div class="bg-white text-[#0A2463] font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">1</div>
+                                <div><p class="font-semibold">Immunize Proprietary Mouse</p><p class="text-sm text-blue-200">Generates fully human sdAbs in vivo.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-blue-900/50 rounded-md">
+                                <div class="bg-white text-[#0A2463] font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">2</div>
+                                <div><p class="font-semibold">Directly Isolate sdAbs</p><p class="text-sm text-blue-200">Rapid discovery and screening.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-green-500/30 rounded-md">
+                                <div class="bg-white text-green-800 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">✓</div>
+                                <div><p class="font-semibold text-green-200">No Humanization Needed</p><p class="text-sm text-blue-200">Saves months of development and drastically reduces risk.</p></div>
+                            </div>
+                            <div class="flex items-center p-3 bg-blue-900/50 rounded-md">
+                                <div class="bg-white text-[#0A2463] font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4">3</div>
+                                <div><p class="font-semibold">Clinic-Ready Candidate</p><p class="text-sm text-blue-200">Minimized immunogenicity, superior developability.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="traction" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#0A2463]">Proven, Productive, and Partnered</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Our platform isn't theoretical; it's a high-throughput engine for therapeutic discovery. In the last year alone, we have demonstrated remarkable success across multiple high-value targets and therapeutic areas, validating the power and versatility of our approach.</p>
+                </div>
+                
+                <div class="flex justify-center mb-8 space-x-2 md:space-x-4">
+                    <button class="btn-filter active py-2 px-4 rounded-full font-semibold bg-gray-200 text-gray-800" data-filter="all">All Campaigns</button>
+                    <button class="btn-filter py-2 px-4 rounded-full font-semibold bg-gray-200 text-gray-800" data-filter="oncology">Oncology</button>
+                    <button class="btn-filter py-2 px-4 rounded-full font-semibold bg-gray-200 text-gray-800" data-filter="autoimmune">Autoimmune</button>
+                    <button class="btn-filter py-2 px-4 rounded-full font-semibold bg-gray-200 text-gray-800" data-filter="infectious">Infectious Disease</button>
+                </div>
+
+                <div id="campaign-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </div>
+        </section>
+
+        <section id="market-fit" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#0A2463]">The Ultimate Building Block for Modern Biologics</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Leveragen's sdAbs are not just replacements for traditional antibodies; they are superior components designed to enhance the most advanced therapeutic modalities. Their small size, stability, and human origin make them ideal for creating next-generation drugs.</p>
+                </div>
+                <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                    <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">🎯</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">CAR-T Therapy</h3>
+                        <p class="text-gray-600 mt-1">Ideal for creating smaller, more effective CAR constructs that can better penetrate solid tumors.</p>
+                    </div>
+                    <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">🧬</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">mRNA Therapeutics</h3>
+                        <p class="text-gray-600 mt-1">Enables targeted delivery of mRNA payloads directly to specific cell types.</p>
+                    </div>
+                    <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">🔗</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">Bispecifics & ADCs</h3>
+                        <p class="text-gray-600 mt-1">Simplifies the engineering of multi-specific drugs and antibody-drug conjugates with better stability.</p>
+                    </div>
+                     <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">🛡️</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">Protein Degraders</h3>
+                        <p class="text-gray-600 mt-1">Perfect for targeted protein degradation applications, delivering payloads with high specificity.</p>
+                    </div>
+                     <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">🦠</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">Anti-Infectives</h3>
+                        <p class="text-gray-600 mt-1">Potent neutralizing agents against viruses and bacteria, capable of accessing cryptic epitopes.</p>
+                    </div>
+                     <div class="stat-card p-6">
+                        <div class="text-4xl mb-2">⚖️</div>
+                        <h3 class="text-lg font-bold text-[#0A2463]">Immune Modulators</h3>
+                        <p class="text-gray-600 mt-1">Highly specific targeting of immune checkpoints and cytokines for autoimmune and oncology indications.</p>
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <p class="text-lg font-semibold text-gray-700 max-w-2xl mx-auto">Protected by two PTC patents, our platform provides complete freedom to operate in the key global markets of the US, EU, and China.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ask" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#0A2463]">Series A: Fueling the Next Wave of Innovation</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">We are seeking $15 million to advance our lead candidates toward the clinic, expand our discovery efforts, and scale our world-class team. This investment will solidify Leveragen as the leader in fully human single-domain antibody therapeutics.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold text-center text-[#0A2463] mb-4">Proposed Use of Funds</h3>
+                        <div class="chart-container" style="height: 350px; max-height: 350px;">
+                            <canvas id="fundsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="text-lg space-y-6">
+                        <div class="flex items-start">
+                            <span class="text-green-500 font-bold text-2xl mr-4">✓</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Advance 2-3 Lead Candidates</h4>
+                                <p class="text-gray-600">Complete IND-enabling studies for our top programs in oncology and autoimmune disease.</p>
+                            </div>
+                        </div>
+                         <div class="flex items-start">
+                            <span class="text-green-500 font-bold text-2xl mr-4">✓</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Scale Discovery Platform</h4>
+                                <p class="text-gray-600">Expand capacity to support more partnerships and internal pipeline growth.</p>
+                            </div>
+                        </div>
+                         <div class="flex items-start">
+                            <span class="text-green-500 font-bold text-2xl mr-4">✓</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Expand Scientific Team</h4>
+                                <p class="text-gray-600">Recruit top talent in antibody engineering, translational science, and clinical development.</p>
+                            </div>
+                        </div>
+                         <div class="flex items-start">
+                            <span class="text-green-500 font-bold text-2xl mr-4">✓</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Strengthen IP Portfolio</h4>
+                                <p class="text-gray-600">Continue to build a moat around our core technology and discoveries.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#0A2463] text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold">Join Us in Redefining Biologics</h2>
+            <p class="mt-4 text-lg text-blue-200">Contact us to learn more about this investment opportunity.</p>
+            <p class="mt-6 font-semibold">contact@leveragen.com</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const marketCtx = document.getElementById('marketChart').getContext('2d');
+            new Chart(marketCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024 (E)', '2025 (P)', '2026 (P)', '2027 (P)', '2028 (P)'],
+                    datasets: [{
+                        label: 'Market Size (USD Billions)',
+                        data: [186, 205, 228, 252, 278, 305, 330],
+                        backgroundColor: '#3E92CC',
+                        borderColor: '#0A2463',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.raw} Billion`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'USD Billions'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const fundsCtx = document.getElementById('fundsChart').getContext('2d');
+            new Chart(fundsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Lead Candidate Advancement (R&D)', 'Platform Expansion', 'Team Growth (G&A)', 'IP & Operations'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: ['#0A2463', '#3E92CC', '#7CB5DF', '#B4D6EE'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const campaigns = [
+                { title: 'GPCR Modulator', category: 'autoimmune', description: 'Successfully identified functional antagonists against a notoriously difficult GPCR target.' },
+                { title: 'Tumor Microenvironment', category: 'oncology', description: 'Generated sdAbs that penetrate solid tumors and modulate immune response.' },
+                { title: 'Viral Neutralization', category: 'infectious', description: 'Discovered potent neutralizing sdAbs against a key viral surface protein.' },
+                { title: 'Checkpoint Inhibitor', category: 'oncology', description: 'Developed novel checkpoint inhibitors with unique binding epitopes.' },
+                { title: 'Anti-Cytokine', category: 'autoimmune', description: 'Created high-affinity binders to a pro-inflammatory cytokine for autoimmune therapy.' },
+                { title: 'Bacterial Toxin Neutralizer', category: 'infectious', description: 'Isolated sdAbs that effectively neutralize a key bacterial toxin in vitro.' },
+                { title: 'ADC Targeting', category: 'oncology', description: 'Identified sdAbs suitable for ADC development against a solid tumor antigen.' },
+                { title: 'Immune Cell Agonist', category: 'oncology', description: 'Functional sdAbs designed to activate specific immune cell populations.' },
+                { title: 'CNS Target Delivery', category: 'autoimmune', description: 'Engineered sdAbs capable of crossing the blood-brain barrier for neuroinflammation.' },
+            ];
+
+            const campaignGrid = document.getElementById('campaign-grid');
+            const filterButtons = document.querySelectorAll('.btn-filter');
+
+            const renderCampaigns = (filter) => {
+                campaignGrid.innerHTML = '';
+                const filteredCampaigns = filter === 'all' ? campaigns : campaigns.filter(c => c.category === filter);
+                
+                if(filteredCampaigns.length === 0) {
+                     campaignGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">No campaigns match this filter. Displaying ${campaigns.length} successful campaigns total.</p>`;
+                }
+
+                filteredCampaigns.forEach(campaign => {
+                    const card = document.createElement('div');
+                    card.className = 'stat-card campaign-card';
+                    card.setAttribute('data-category', campaign.category);
+                    
+                    let categoryColor = 'gray';
+                    if (campaign.category === 'oncology') categoryColor = 'purple';
+                    if (campaign.category === 'autoimmune') categoryColor = 'indigo';
+                    if (campaign.category === 'infectious') categoryColor = 'teal';
+
+                    card.innerHTML = `
+                        <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-${categoryColor}-800 uppercase bg-${categoryColor}-200 rounded-full">${campaign.category}</span>
+                        <h3 class="mt-3 text-lg font-bold text-[#0A2463]">${campaign.title}</h3>
+                        <p class="mt-1 text-gray-600 text-sm">${campaign.description}</p>
+                    `;
+                    campaignGrid.appendChild(card);
+                });
+            };
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderCampaigns(button.dataset.filter);
+                });
+            });
+
+            renderCampaigns('all');
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
