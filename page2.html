@@ -1,0 +1,1505 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Leveragen Series A Investor Pitch | The Future of Human Antibody Therapeutics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2d5a87;
+            --accent: #4a90a4;
+            --highlight: #f8fafb;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            z-index: 50;
+            padding: 2rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            min-height: 70vh;
+        }
+        
+        .citation {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 2px;
+        }
+        
+        .citation:hover {
+            background: var(--secondary);
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+            margin: 4rem 0;
+        }
+        
+        .pull-quote {
+            border-left: 4px solid var(--accent);
+            padding-left: 2rem;
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin: 2rem 0;
+        }
+        
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+        
+@media (max-width: 1024px) {
+    .toc-fixed {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+    .mermaid-control-btn:not(.reset-zoom) {
+        display: none;
+    }
+    .mermaid-controls {
+        top: auto;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* Adjustments for small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .hero-grid {
+        min-height: auto;
+        padding: 1rem 0;
+    }
+    
+    section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .hero-grid h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-grid p {
+        font-size: 1.1rem;
+    }
+}
+    </style>
+  </head>
+
+  <body class="bg-white">
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed">
+      <h3 class="serif text-xl font-bold text-gray-800 mb-6">Contents</h3>
+      <ul class="space-y-3 text-sm">
+        <li>
+          <a href="#problem" class="text-gray-600 hover:text-blue-600 transition-colors">1. The Problem</a>
+        </li>
+        <li class="ml-4">
+          <a href="#market-boom" class="text-gray-500 hover:text-blue-600 transition-colors">1.1 Market Boom &amp; Risks</a>
+        </li>
+        <li class="ml-4">
+          <a href="#critical-flaw" class="text-gray-500 hover:text-blue-600 transition-colors">1.2 Critical Flaw</a>
+        </li>
+        <li class="ml-4">
+          <a href="#production-botleneck" class="text-gray-500 hover:text-blue-600 transition-colors">1.3 Production Bottleneck</a>
+        </li>
+        <li>
+          <a href="#solution" class="text-gray-600 hover:text-blue-600 transition-colors">2. Our Solution</a>
+        </li>
+        <li class="ml-4">
+          <a href="#singularity-platform" class="text-gray-500 hover:text-blue-600 transition-colors">2.1 Singularity Platform</a>
+        </li>
+        <li class="ml-4">
+          <a href="#scientific-advantage" class="text-gray-500 hover:text-blue-600 transition-colors">2.2 Scientific Advantage</a>
+        </li>
+        <li class="ml-4">
+          <a href="#validation" class="text-gray-500 hover:text-blue-600 transition-colors">2.3 Preclinical Validation</a>
+        </li>
+        <li>
+          <a href="#market-opportunity" class="text-gray-600 hover:text-blue-600 transition-colors">3. Market Opportunity</a>
+        </li>
+        <li class="ml-4">
+          <a href="#market-size" class="text-gray-500 hover:text-blue-600 transition-colors">3.1 Market Size</a>
+        </li>
+        <li class="ml-4">
+          <a href="#competitive-landscape" class="text-gray-500 hover:text-blue-600 transition-colors">3.2 Competitive Landscape</a>
+        </li>
+        <li class="ml-4">
+          <a href="#commercial-advantage" class="text-gray-500 hover:text-blue-600 transition-colors">3.3 Commercial Advantage</a>
+        </li>
+        <li>
+          <a href="#go-to-market" class="text-gray-600 hover:text-blue-600 transition-colors">4. Go-to-Market</a>
+        </li>
+        <li class="ml-4">
+          <a href="#business-model" class="text-gray-500 hover:text-blue-600 transition-colors">4.1 Business Model</a>
+        </li>
+        <li class="ml-4">
+          <a href="#regulatory-path" class="text-gray-500 hover:text-blue-600 transition-colors">4.2 Regulatory Path</a>
+        </li>
+        <li class="ml-4">
+          <a href="#series-a" class="text-gray-500 hover:text-blue-600 transition-colors">4.3 Series A Ask</a>
+        </li>
+        <li>
+          <a href="#team" class="text-gray-600 hover:text-blue-600 transition-colors">5. Team &amp; Vision</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="bg-gradient-to-br from-slate-50 to-blue-50 px-8 py-16">
+        <div class="max-w-7xl mx-auto">
+          <div class="hero-grid">
+            <div class="space-y-8">
+              <div class="space-y-4">
+                <h1 class="serif text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  The <em class="text-blue-700">Hidden Risks</em> of the Nanobody Gold Rush
+                </h1>
+                <p class="text-xl text-gray-600 font-light">
+                  How Leveragen&#39;s fully human single-domain antibody platform is positioned to capture the $2.5B market opportunity
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <div class="text-3xl font-bold text-blue-700">$603M</div>
+                  <div class="text-sm text-gray-600 mt-1">Nanobody Market 2024</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <div class="text-3xl font-bold text-blue-700">20.9%</div>
+                  <div class="text-sm text-gray-600 mt-1">CAGR to $3.3B by 2033</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <div class="text-3xl font-bold text-blue-700">$15M</div>
+                  <div class="text-sm text-gray-600 mt-1">Series A Investment Ask</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <img src="https://kimi-web-img.moonshot.cn/img/engineering.uci.edu/54a488dc7bd6340e7178f502906ccf5202ffc2c7.png" alt="Laboratory research on antibody engineering" class="rounded-2xl shadow-2xl w-full h-96 object-cover" size="large" aspect="wide" style="photo" query="antibody engineering laboratory research" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Problem Section -->
+      <section id="problem" class="px-8 py-16 max-w-6xl mx-auto">
+        <h2 class="serif text-4xl font-bold text-gray-900 mb-8">The Problem: The Hidden Risks of the Nanobody Gold Rush</h2>
+
+        <!-- Market Boom -->
+        <div id="market-boom" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Llama Nanobody Market is Booming, But...</h3>
+
+          <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div>
+              <p class="text-lg text-gray-700 mb-6">
+                The market for single-domain antibodies is experiencing explosive growth, valued at <strong>$568.3 million in 2025</strong> and projected to reach <strong>$2.58 billion by 2032</strong>
+                <a href="https://www.coherentmarketinsights.com/market-insight/nanobodies-market-1680" class="citation">209</a>.
+                This 24.1% CAGR reflects strong confidence in nanobodies&#39; potential across oncology, autoimmune, and infectious diseases.
+              </p>
+
+              <div class="pull-quote">
+                &#34;The unique structural advantages of nanobodies allow for better tissue penetration and targeting of cryptic epitopes inaccessible to conventional antibodies.&#34;
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-blue-50 p-6 rounded-lg">
+                <h4 class="font-semibold text-gray-800 mb-4">Key Market Players</h4>
+                <ul class="space-y-2 text-gray-700">
+                  <li><strong>Sanofi/Ablynx:</strong> Market leader through €3.9B acquisition</li>
+                  <li><strong>Merck KGaA:</strong> Major pharmaceutical investment</li>
+                  <li><strong>GenScript:</strong> Specialized platform development</li>
+                  <li><strong>Attovia Therapeutics:</strong> $60M Series A funding</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Critical Flaw -->
+        <div id="critical-flaw" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Critical Flaw: Immunogenicity and Humanization Hurdles</h3>
+
+          <div class="bg-red-50 border-l-4 border-red-400 p-6 mb-8">
+            <h4 class="font-semibold text-red-800 mb-3">The Immunogenicity Risk</h4>
+            <p class="text-red-700">
+              Camelid-derived VHHs contain non-human sequences that can trigger anti-drug antibodies (ADAs) in patients. Despite 86-94% homology with human VH3 genes, unique epitopes remain that pose immunogenicity risks <a href="https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2021.632687/full" class="citation">219</a>.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-800">Case Studies of Failure</h4>
+              <div class="space-y-3">
+                <div class="bg-gray-50 p-4 rounded">
+                  <strong>TAS266:</strong> Tetrameric DR5-specific VHH discontinued due to high immunogenicity
+                  <a href="https://pubmed.ncbi.nlm.nih.gov/33751827/" class="citation">218</a>
+                </div>
+                <div class="bg-gray-50 p-4 rounded">
+                  <strong>GSK1995057:</strong> TNFR1-specific VHH faced similar immunogenicity challenges
+                  <a href="https://pubmed.ncbi.nlm.nih.gov/33751827/" class="citation">218</a>
+                </div>
+                <div class="bg-gray-50 p-4 rounded">
+                  <strong>Pfizer&#39;s bococizumab:</strong> PCSK9 inhibitor discontinued due to high immunogenicity
+                  <a href="https://www.nature.com/articles/s41598-022-16453-3" class="citation">232</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-800">The Humanization Challenge</h4>
+              <div class="space-y-3 text-gray-700">
+                <p><strong>Complex Process:</strong> Requires 17+ amino acid mutations for humanization</p>
+                <p><strong>Affinity Loss:</strong> Complete humanization often leads to decreased binding</p>
+                <p><strong>Costly &amp; Time-Consuming:</strong> Extensive optimization required</p>
+                <p><strong>No Guarantee:</strong> Humanization doesn&#39;t always eliminate immunogenicity</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Production Bottleneck -->
+        <div id="production-botleneck" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Production Bottleneck: Scalability and Cost</h3>
+
+          <div class="grid lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-yellow-50 p-6 rounded-lg">
+              <h4 class="font-semibold text-yellow-800 mb-3">Llamas: Slow &amp; Expensive</h4>
+              <ul class="text-yellow-700 space-y-2 text-sm">
+                <li>• Specialized facilities required</li>
+                <li>• 2-3 month immunization timeline</li>
+                <li>• High maintenance costs</li>
+                <li>• Limited scalability</li>
+              </ul>
+            </div>
+
+            <div class="bg-orange-50 p-6 rounded-lg">
+              <h4 class="font-semibold text-orange-800 mb-3">Complex Discovery Process</h4>
+              <ul class="text-orange-700 space-y-2 text-sm">
+                <li>• B cell isolation &amp; RNA extraction</li>
+                <li>• Phage display library construction</li>
+                <li>• Multiple selection rounds</li>
+                <li>• Time-consuming optimization</li>
+              </ul>
+            </div>
+
+            <div class="bg-red-50 p-6 rounded-lg">
+              <h4 class="font-semibold text-red-800 mb-3">Manufacturing Challenges</h4>
+              <ul class="text-red-700 space-y-2 text-sm">
+                <li>• Complex formatting needs</li>
+                <li>• Half-life extension requirements</li>
+                <li>• Specialized production methods</li>
+                <li>• High COGS impact</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="text-gray-700">
+            The traditional approach relying on exotic animal immunization creates significant supply chain vulnerabilities and ethical considerations. Disease outbreaks or regulatory changes could disrupt the entire nanobody industry <a href="https://www.nature.com/articles/s41598-024-68680-5" class="citation">222</a>.
+          </p>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Solution Section -->
+      <section id="solution" class="px-8 py-16 max-w-6xl mx-auto">
+        <h2 class="serif text-4xl font-bold text-gray-900 mb-8">Leveragen&#39;s Solution: The First Fully Human Single-Domain Antibody Platform</h2>
+
+        <!-- Singularity Platform -->
+        <div id="singularity-platform" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Singularity Mouse™ Platform</h3>
+
+          <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div>
+              <img src="https://kimi-web-img.moonshot.cn/img/www.genome.gov/1491d18d283de7d3a45e6308c46fe50cb86ac16e.jpg" alt="Genetically engineered mouse in laboratory setting" class="rounded-lg shadow-lg w-full h-64 object-cover" size="medium" aspect="wide" style="photo" query="laboratory mouse genetic engineering research" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+            </div>
+
+            <div class="space-y-4">
+              <p class="text-lg text-gray-700">
+                Leveragen&#39;s proprietary <strong>Singularity Mouse™ platform</strong> represents a paradigm shift in antibody discovery. Using genetically engineered mice humanized to produce fully human single-domain antibodies directly in vivo <a href="https://crisprmedicinenews.com/press-release-service/card/leveragen-and-92bio-forge-strategic-alliance-to-advance-therapeutics-using-novel-single-domain-antib/" class="citation">176</a>.
+              </p>
+
+              <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                <h4 class="font-semibold text-green-800 mb-2">Key Innovation</h4>
+                <p class="text-green-700 text-sm">
+                  Bypasses the critical humanization process entirely, generating 100% human antibodies from discovery through development
+                </p>
+              </div>
+
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center space-x-2">
+                  <i class="fas fa-check text-green-500"></i>
+                  <span>Leverages natural humoral immune response</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <i class="fas fa-check text-green-500"></i>
+                  <span>CRISPR-engineered human heavy chain locus</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <i class="fas fa-check text-green-500"></i>
+                  <span>Next-generation sequencing workflow</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platform Advantages -->
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl">
+            <h4 class="serif text-xl font-semibold text-gray-800 mb-6 text-center">Platform Advantages</h4>
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-shield-alt text-white text-xl"></i>
+                </div>
+                <h5 class="font-semibold text-gray-800 mb-2">De-Risked</h5>
+                <p class="text-sm text-gray-600">Eliminates immunogenicity concerns from non-human sequences</p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-rocket text-white text-xl"></i>
+                </div>
+                <h5 class="font-semibold text-gray-800 mb-2">Scalable</h5>
+                <p class="text-sm text-gray-600">Leverages predictable and scalable mouse model infrastructure</p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-clock text-white text-xl"></i>
+                </div>
+                <h5 class="font-semibold text-gray-800 mb-2">Efficient</h5>
+                <p class="text-sm text-gray-600">Accelerated discovery through natural in vivo selection</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scientific Advantage -->
+        <div id="scientific-advantage" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Scientific Advantage: A Superior Therapeutic Profile</h3>
+
+          <div class="space-y-8">
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-dna text-blue-600 mr-2"></i>
+                  Eliminated Immunogenicity
+                </h4>
+                <p class="text-gray-600 text-sm">
+                  100% human sequence eliminates anti-drug antibody risks associated with camelid VHHs. No humanization required.
+                </p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-crosshairs text-green-600 mr-2"></i>
+                  Novel Epitope Access
+                </h4>
+                <p class="text-gray-600 text-sm">
+                  Human-like paratopes enable targeting of challenging proteins like GPCRs and ion channels with high specificity.
+                </p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-cube text-purple-600 mr-2"></i>
+                  Optimal Stability
+                </h4>
+                <p class="text-gray-600 text-sm">
+                  Human scaffold ensures high solubility and stability, reducing aggregation and manufacturing complexity.
+                </p>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              &#34;By generating antibodies from a human repertoire within a living system, we ensure only well-behaved, properly folded proteins with superior biophysical properties make it to development.&#34;
+            </div>
+          </div>
+        </div>
+
+        <!-- Preclinical Validation -->
+        <div id="validation" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">Preclinical Validation and Traction</h3>
+
+          <!-- Success Metrics -->
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+              <div class="text-3xl font-bold text-blue-700 mb-2">20+</div>
+              <div class="text-sm text-blue-600">Discovery Campaigns Completed</div>
+            </div>
+            <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+              <div class="text-3xl font-bold text-green-700 mb-2">92Bio</div>
+              <div class="text-sm text-green-600">Strategic Partnership</div>
+            </div>
+            <div class="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+              <div class="text-3xl font-bold text-purple-700 mb-2">Moderna</div>
+              <div class="text-sm text-purple-600">Research Collaboration</div>
+            </div>
+            <div class="text-center p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
+              <div class="text-3xl font-bold text-orange-700 mb-2">15 kDa</div>
+              <div class="text-sm text-orange-600">Superior Brain Penetration</div>
+            </div>
+          </div>
+
+          <!-- Case Studies -->
+          <div class="space-y-6">
+            <div class="bg-white border border-gray-200 rounded-lg p-6">
+              <h4 class="font-semibold text-gray-800 mb-3">Nipah Virus Neutralization Success</h4>
+              <p class="text-gray-700 mb-3">
+                UdAb n425 demonstrated potent neutralizing activity with superior brain penetrance due to small size (15 kDa). In suckling mouse models, both monomeric and divalent versions showed therapeutic efficacy <a href="https://www.nature.com/articles/s41467-024-51066-6" class="citation">146</a>.
+              </p>
+              <div class="flex items-center space-x-4 text-sm text-gray-600">
+                <span><strong>Key Advantage:</strong> Greater CNS penetration than conventional antibodies</span>
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-lg p-6">
+              <h4 class="font-semibold text-gray-800 mb-3">Cancer Targeting with SBT-100</h4>
+              <p class="text-gray-700 mb-3">
+                Bispecific single-domain antibody targeting both KRAS and STAT3 pathways demonstrated potent antiproliferative activity across 11 human cancer cell lines, with growth suppression ranging from 64% to 93% <a href="https://www.nature.com/articles/d43747-021-00093-z" class="citation">164</a>.
+              </p>
+              <div class="flex items-center space-x-4 text-sm text-gray-600">
+                <span><strong>Coverage:</strong> Pancreatic, breast, and prostate cancers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Market Opportunity -->
+      <section id="market-opportunity" class="px-8 py-16 max-w-6xl mx-auto">
+        <h2 class="serif text-4xl font-bold text-gray-900 mb-8">Market Opportunity: Capturing the Next Wave of Antibody Therapeutics</h2>
+
+        <!-- Market Size -->
+        <div id="market-size" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Expanding Single-Domain Antibody Market</h3>
+
+          <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div class="space-y-6">
+              <p class="text-lg text-gray-700">
+                The global single-domain antibody market presents a compelling growth opportunity, valued at <strong>$603 million in 2024</strong> and projected to reach <strong>$3.3 billion by 2033</strong>, representing a 20.9% compound annual growth rate <a href="https://www.coherentmarketinsights.com/market-insight/nanobodies-market-1680" class="citation">87</a>.
+              </p>
+
+              <div class="bg-blue-50 p-6 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-4">Growth Drivers</h4>
+                <ul class="space-y-2 text-blue-700 text-sm">
+                  <li>• Superior tissue penetration capabilities</li>
+                  <li>• Access to cryptic epitopes</li>
+                  <li>• Versatile engineering into multi-specific formats</li>
+                  <li>• Expanding therapeutic applications</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-white border border-gray-200 rounded-lg p-6">
+                <h4 class="font-semibold text-gray-800 mb-4">Broader Market Context</h4>
+                <p class="text-gray-700 text-sm mb-4">
+                  The next-generation antibody therapeutics market, including ADCs and bispecifics, is projected to grow from <strong>$9.09 billion in 2024</strong> to <strong>$22.88 billion by 2033</strong>
+                  <a href="https://finance.yahoo.com/news/next-generation-antibody-therapeutics-market-140100082.html?fr=sycsrp_catchall" class="citation">181</a>.
+                </p>
+                <div class="text-center p-4 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-gray-800">10.9%</div>
+                  <div class="text-sm text-gray-600">CAGR for broader antibody market</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitive Landscape -->
+        <div id="competitive-landscape" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Competitive Landscape: A Gap in the Market</h3>
+
+          <div class="mb-8">
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TB
+                A[&#34;Single-Domain Antibody Market&#34;] --&gt; B[&#34;Llama-Derived VHHs
+                <br/>63% Market Share&#34;]
+                A --&gt; C[&#34;Synthetic Human Libraries
+                <br/>27% Market Share&#34;]
+                A --&gt; D[&#34;Leveragen Platform
+                <br/>10% Market Opportunity&#34;]
+
+                B --&gt; B1[&#34;Sanofi/Ablynx
+                <br/>- High immunogenicity risk
+                <br/>- Costly humanization
+                <br/>- Production bottlenecks&#34;]
+                B --&gt; B2[&#34;Other Players
+                <br/>- Attovia
+                <br/>- Numab Therapeutics&#34;]
+
+                C --&gt; C1[&#34;Phage Display
+                <br/>- Limited affinity
+                <br/>- Stability issues
+                <br/>- Engineering complexity&#34;]
+                C --&gt; C2[&#34;Yeast Display
+                <br/>- Developability challenges
+                <br/>- Complex target limitations&#34;]
+
+                D --&gt; D1[&#34;Fully Human
+                <br/>✓ Zero immunogenicity
+                <br/>✓ No humanization needed
+                <br/>✓ Scalable mouse model&#34;]
+                D --&gt; D2[&#34;In Vivo Selection
+                <br/>✓ Natural affinity maturation
+                <br/>✓ Superior stability
+                <br/>✓ Cost-effective production&#34;]
+
+                style B fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000
+                style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+                style D fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+                style A fill:#f5f5f5,stroke:#424242,stroke-width:3px,color:#000
+                style B1 fill:#ffebee,stroke:#d32f2f,stroke-width:1px,color:#333
+                style B2 fill:#ffebee,stroke:#d32f2f,stroke-width:1px,color:#333
+                style C1 fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#333
+                style C2 fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#333
+                style D1 fill:#e8f5e8,stroke:#388e3c,stroke-width:1px,color:#333
+                style D2 fill:#e8f5e8,stroke:#388e3c,stroke-width:1px,color:#333
+              </div>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+              <h4 class="font-semibold text-red-800 mb-3">Llama-Derived VHHs</h4>
+              <div class="space-y-2 text-red-700 text-sm">
+                <div>✗ High immunogenicity risk</div>
+                <div>✗ Complex humanization process</div>
+                <div>✗ Production scalability issues</div>
+                <div>✗ Supply chain vulnerabilities</div>
+              </div>
+            </div>
+
+            <div class="bg-orange-50 p-6 rounded-lg border border-orange-200">
+              <h4 class="font-semibold text-orange-800 mb-3">Synthetic Libraries</h4>
+              <div class="space-y-2 text-orange-700 text-sm">
+                <div>✗ Limited affinity and stability</div>
+                <div>✗ Developability challenges</div>
+                <div>✗ Complex target limitations</div>
+                <div>✗ Extensive engineering required</div>
+              </div>
+            </div>
+
+            <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+              <h4 class="font-semibold text-green-800 mb-3">Leveragen Platform</h4>
+              <div class="space-y-2 text-green-700 text-sm">
+                <div>✓ Zero immunogenicity risk</div>
+                <div>✓ Natural affinity maturation</div>
+                <div>✓ Scalable mouse model</div>
+                <div>✓ Cost-effective production</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commercial Advantage -->
+        <div id="commercial-advantage" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The Commercial Advantage: A Clearer Path to the Clinic</h3>
+
+          <div class="space-y-8">
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="text-center p-6 bg-gradient-to-b from-blue-50 to-white rounded-xl">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-shield-alt text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-3">De-Risked Development</h4>
+                <p class="text-gray-600 text-sm">
+                  Elimination of immunogenicity increases clinical success probability and reduces costly testing requirements.
+                </p>
+              </div>
+
+              <div class="text-center p-6 bg-gradient-to-b from-green-50 to-white rounded-xl">
+                <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-fast-forward text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-3">Streamlined Regulatory</h4>
+                <p class="text-gray-600 text-sm">
+                  Fully human antibodies align with established FDA/EMA guidelines for therapeutic antibodies.
+                </p>
+              </div>
+
+              <div class="text-center p-6 bg-gradient-to-b from-purple-50 to-white rounded-xl">
+                <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-industry text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-3">Scalable Manufacturing</h4>
+                <p class="text-gray-600 text-sm">
+                  Compatible with standard CHO cell production infrastructure and mature manufacturing processes.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-gray-50 to-blue-50 p-8 rounded-xl">
+              <h4 class="font-semibold text-gray-800 mb-4 text-center">Commercial Value Proposition</h4>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h5 class="font-medium text-gray-800 mb-3">Cost Advantages</h5>
+                  <ul class="space-y-2 text-gray-700 text-sm">
+                    <li>• No humanization costs ($1-2M per candidate)</li>
+                    <li>• Reduced immunogenicity testing complexity</li>
+                    <li>• Standard manufacturing infrastructure</li>
+                    <li>• Predictable development timelines</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 class="font-medium text-gray-800 mb-3">Value Drivers</h5>
+                  <ul class="space-y-2 text-gray-700 text-sm">
+                    <li>• Higher probability of clinical success</li>
+                    <li>• Attractive to pharma partners</li>
+                    <li>• Premium valuation multiples</li>
+                    <li>• Broader therapeutic applications</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Go-to-Market Strategy -->
+      <section id="go-to-market" class="px-8 py-16 max-w-6xl mx-auto">
+        <h2 class="serif text-4xl font-bold text-gray-900 mb-8">Go-to-Market Strategy and Series A Use of Funds</h2>
+
+        <!-- Business Model -->
+        <div id="business-model" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">Business Model: A Platform for Partnership and Pipeline Development</h3>
+
+          <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div class="space-y-6">
+              <p class="text-lg text-gray-700">
+                Leveragen&#39;s hybrid business model combines strategic partnerships with internal pipeline development, creating multiple value streams while mitigating single-product risk.
+              </p>
+
+              <div class="bg-blue-50 p-6 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-3">Revenue Streams</h4>
+                <div class="space-y-2 text-blue-700 text-sm">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-handshake text-blue-600"></i>
+                    <span><strong>Partnerships:</strong> Upfront payments, milestones, royalties</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-flask text-blue-600"></i>
+                    <span><strong>Internal Pipeline:</strong> Full ownership of lead assets</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-cogs text-blue-600"></i>
+                    <span><strong>Platform Licensing:</strong> Technology access fees</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <img src="https://kimi-web-img.moonshot.cn/img/sharevault.com/baf3ffcf9d19d3945129185bccdf58bf47ac0eb7.jpg" alt="Business partnership handshake in laboratory setting" class="rounded-lg shadow-lg w-full h-64 object-cover" size="medium" aspect="wide" style="photo" query="business partnership handshake laboratory" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-building text-blue-600 mr-2"></i>
+                Targeted Partnerships
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">
+                Collaborate with pharma and biotech leaders to leverage their disease expertise and commercial infrastructure.
+              </p>
+              <div class="text-xs text-gray-500">
+                <strong>Current Partners:</strong> 92Bio, Moderna
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-rocket text-green-600 mr-2"></i>
+                Internal Pipeline
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">
+                Develop proprietary therapeutics in high-value indications: oncology, autoimmune, and infectious diseases.
+              </p>
+              <div class="text-xs text-gray-500">
+                <strong>Focus:</strong> Retain full ownership of key assets
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-copyright text-purple-600 mr-2"></i>
+                Platform Licensing
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">
+                License Singularity Mouse™ technology to expand reach and validate platform through external applications.
+              </p>
+              <div class="text-xs text-gray-500">
+                <strong>Benefit:</strong> Additional non-dilutive revenue
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Regulatory Path -->
+        <div id="regulatory-path" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">Regulatory and Clinical Pathway</h3>
+
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl mb-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+              <div>
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-vial text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">IND-Enabling Studies</h4>
+                <p class="text-gray-600 text-sm">Comprehensive safety, pharmacology, and toxicology evaluation</p>
+              </div>
+
+              <div>
+                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-file-medical text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">IND Filing</h4>
+                <p class="text-gray-600 text-sm">First IND applications within 24 months of Series A closing</p>
+              </div>
+
+              <div>
+                <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-hospital text-white text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">Clinical Trials</h4>
+                <p class="text-gray-600 text-sm">Leverage established regulatory precedents for human antibodies</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="bg-white border border-gray-200 rounded-lg p-6">
+              <h4 class="font-semibold text-gray-800 mb-3">Regulatory Advantages</h4>
+              <div class="grid md:grid-cols-2 gap-4">
+                <ul class="space-y-2 text-gray-700 text-sm">
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-check text-green-500"></i>
+                    <span>Fully human antibodies align with FDA/EMA guidelines</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-check text-green-500"></i>
+                    <span>Established safety record for human mAbs</span>
+                  </li>
+                </ul>
+                <ul class="space-y-2 text-gray-700 text-sm">
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-check text-green-500"></i>
+                    <span>Simplified toxicology packages</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-check text-green-500"></i>
+                    <span>Predictable development timelines</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Series A Ask -->
+        <div id="series-a" class="mb-16">
+          <h3 class="serif text-2xl font-semibold text-gray-800 mb-6">The $15M Series A Ask</h3>
+
+          <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-8 rounded-2xl mb-8">
+            <div class="text-center mb-6">
+              <div class="text-6xl font-bold mb-2">$15M</div>
+              <div class="text-xl opacity-90">Series A Financing Round</div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div class="text-2xl font-bold mb-1">24 Months</div>
+                <div class="text-sm opacity-90">To IND Filing</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold mb-1">3 Programs</div>
+                <div class="text-sm opacity-90">Lead Candidates</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold mb-1">World-Class</div>
+                <div class="text-sm opacity-90">Team Building</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Use of Funds Breakdown -->
+          <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-4">Primary Use of Funds</h4>
+              <div class="space-y-4">
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium text-gray-800">IND-Enabling Studies</span>
+                    <span class="text-blue-600 font-bold">$7M</span>
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Advance lead programs through comprehensive preclinical development, safety assessment, and manufacturing process development.
+                  </p>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium text-gray-800">Platform Expansion</span>
+                    <span class="text-green-600 font-bold">$4M</span>
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Extend platform capabilities to target GPCRs and ion channels, opening new therapeutic opportunities.
+                  </p>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium text-gray-800">Team Building</span>
+                    <span class="text-purple-600 font-bold">$4M</span>
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Build world-class team in antibody discovery, preclinical development, and regulatory affairs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <img src="https://kimi-web-img.moonshot.cn/img/images.unsplash.com/e366ba7bc0b710e2669b833e0bb2714d50f6022f" alt="Biotechnology laboratory equipment" class="rounded-lg shadow-lg w-full h-64 object-cover mb-4" size="medium" aspect="wide" style="photo" query="biotechnology laboratory equipment" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-gray-800 mb-3">Investment Highlights</h4>
+                <ul class="space-y-2 text-gray-700 text-sm">
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <span>Proprietary platform with 20+ successful campaigns</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <span>Strategic partnerships with 92Bio and Moderna</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <span>Clear path to IND filing within 24 months</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <i class="fas fa-star text-yellow-500"></i>
+                    <span>$2.5B addressable market opportunity</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <p class="text-lg text-gray-700 mb-4">
+              This funding will transform Leveragen from a validated platform company into a clinical-stage biotechnology leader, positioning us to capture significant market share in the rapidly expanding single-domain antibody market.
+            </p>
+            <div class="bg-blue-50 p-4 rounded-lg inline-block">
+              <div class="text-2xl font-bold text-blue-700">$500M+</div>
+              <div class="text-sm text-blue-600">Projected market opportunity capture by 2030</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Team and Vision -->
+      <section id="team" class="px-8 py-16 max-w-6xl mx-auto">
+        <h2 class="serif text-4xl font-bold text-gray-900 mb-8">The Leveragen Team and Vision</h2>
+
+        <div class="grid lg:grid-cols-2 gap-8 mb-12">
+          <div class="space-y-6">
+            <h3 class="serif text-2xl font-semibold text-gray-800">Leadership with Deep Expertise</h3>
+            <p class="text-lg text-gray-700">
+              Leveragen is led by seasoned professionals with proven track records in antibody engineering, drug development, and business management spanning the entire pharmaceutical value chain.
+            </p>
+
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
+              <h4 class="font-semibold text-gray-800 mb-4">Team Capabilities</h4>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <strong class="text-gray-800">Scientific Expertise</strong>
+                  <ul class="text-gray-600 mt-2 space-y-1">
+                    <li>• Antibody engineering</li>
+                    <li>• CRISPR gene editing</li>
+                    <li>• Protein biochemistry</li>
+                    <li>• Immunology</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong class="text-gray-800">Development Experience</strong>
+                  <ul class="text-gray-600 mt-2 space-y-1">
+                    <li>• Preclinical development</li>
+                    <li>• Regulatory affairs</li>
+                    <li>• Clinical trial design</li>
+                    <li>• Manufacturing scale-up</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <img src="https://kimi-web-img.moonshot.cn/img/www.amgenbiotechexperience.com/06de10d042fa30893b2f84f7b23712501f507cbb.png" alt="Biotechnology research team working in laboratory" class="rounded-lg shadow-lg w-full h-64 object-cover" size="medium" aspect="wide" style="photo" query="biotechnology research team laboratory" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+          </div>
+        </div>
+
+        <div class="text-center mb-12">
+          <h3 class="serif text-3xl font-bold text-gray-900 mb-4">Our Vision: Redefining the Standard</h3>
+          <div class="pull-quote text-center border-none pl-0 text-xl">
+            &#34;To transform antibody therapeutics by providing a reliable, scalable, and de-risked platform that unlocks the full potential of single-domain antibodies for patients worldwide.&#34;
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-gray-900 to-blue-900 text-white p-12 rounded-2xl text-center">
+          <h3 class="serif text-3xl font-bold mb-6">Join Us in Building the Next Generation of Human Medicines</h3>
+          <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
+            Leveragen is at a critical inflection point. With our proprietary platform, strategic partnerships, and clear path to clinical development, we are positioned to capture significant value in the $2.5B single-domain antibody market.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white/10 p-6 rounded-lg">
+              <div class="text-2xl font-bold mb-2">$15M</div>
+              <div class="text-sm opacity-80">Series A Investment</div>
+            </div>
+            <div class="bg-white/10 p-6 rounded-lg">
+              <div class="text-2xl font-bold mb-2">24 Months</div>
+              <div class="text-sm opacity-80">To IND Filing</div>
+            </div>
+            <div class="bg-white/10 p-6 rounded-lg">
+              <div class="text-2xl font-bold mb-2">$2.5B</div>
+              <div class="text-sm opacity-80">Addressable Market</div>
+            </div>
+          </div>
+
+          <button class="bg-white text-gray-900 px-12 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors">
+            Contact Us to Learn More
+          </button>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-gray-50 px-8 py-12 border-t border-gray-200">
+        <div class="max-w-6xl mx-auto text-center">
+          <div class="mb-8">
+            <h3 class="serif text-2xl font-bold text-gray-900 mb-4">Leveragen</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Pioneering the next generation of fully human single-domain antibody therapeutics to transform patient care worldwide.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-3">Contact</h4>
+              <p class="text-gray-600 text-sm">
+                For investment inquiries and partnership opportunities
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-3">Location</h4>
+              <p class="text-gray-600 text-sm">
+                Biotechnology research hub with state-of-the-art facilities
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-3">Connect</h4>
+              <p class="text-gray-600 text-sm">
+                Follow our progress in revolutionizing antibody therapeutics
+              </p>
+            </div>
+          </div>
+
+          <div class="text-sm text-gray-500">
+            <p>© 2025 Leveragen. All rights reserved. | Confidential Investment Presentation</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Mermaid with enhanced styling for better contrast
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#ffffff',
+                primaryTextColor: '#1a1a1a',
+                primaryBorderColor: '#2d5a87',
+                lineColor: '#4a90a4',
+                sectionBkgColor: '#f8fafb',
+                altSectionBkgColor: '#ffffff',
+                gridColor: '#e5e7eb',
+                secondaryColor: '#f0f9ff',
+                tertiaryColor: '#f8fafb',
+                background: '#ffffff',
+                mainBkg: '#ffffff',
+                secondBkg: '#f8fafb',
+                tertiaryBkg: '#f0f9ff',
+                edgeLabelBackground: '#ffffff',
+                clusterBkg: '#f8fafb',
+                clusterBorder: '#4a90a4',
+                defaultLinkColor: '#4a90a4',
+                titleColor: '#1a1a1a',
+                darkMode: false,
+                // Enhanced contrast for different node types
+                cScale0: '#ffebee',
+                cScale1: '#fff3e0', 
+                cScale2: '#e8f5e8',
+                cScale3: '#f8fafb',
+                cScale4: '#f0f9ff',
+                // Text colors for better contrast
+                cScaleLabel0: '#1a1a1a',
+                cScaleLabel1: '#1a1a1a',
+                cScaleLabel2: '#1a1a1a',
+                cScaleLabel3: '#1a1a1a',
+                cScaleLabel4: '#1a1a1a'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 30,
+                nodeSpacing: 50,
+                rankSpacing: 80,
+                diagramPadding: 20
+            },
+            fontSize: 14,
+            fontFamily: 'Inter, sans-serif'
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize after mermaid renders
+        setTimeout(initializeMermaidControls, 1000);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight current section in TOC
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id], div[id]');
+            const scrollPos = window.scrollY + 200;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                const id = section.getAttribute('id');
+                const tocLink = document.querySelector(`a[href="#${id}"]`);
+                
+                if (scrollPos >= top && scrollPos <= bottom) {
+                    document.querySelectorAll('.toc-fixed a').forEach(link => {
+                        link.classList.remove('text-blue-600', 'font-semibold');
+                        link.classList.add('text-gray-600');
+                    });
+                    if (tocLink) {
+                        tocLink.classList.remove('text-gray-600');
+                        tocLink.classList.add('text-blue-600', 'font-semibold');
+                    }
+                }
+            });
+        });
+    </script>
+  
+
+</body></html>
