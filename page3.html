@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan-U.S. Biotech Corridor Explorer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet CSS & JS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
+        .leaflet-popup-content {
+            margin: 12px;
+            font-size: 14px;
+        }
+        .company-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .tag {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag.active {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            font-weight: 600;
+        }
+         /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-atom text-blue-600 text-3xl mr-3"></i>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Taiwan-U.S. Biotech Explorer</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Introduction -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">Bridging Pacific Innovation</h2>
+            <p class="text-slate-600">
+                Explore the landscape of Taiwanese biotechnology companies that have established a significant operational presence in the United States. This interactive tool, based on the "Taiwan-U.S. Biotech Bridge" report, is designed for investors, partners, and entrepreneurs to discover opportunities and understand cross-Pacific expansion strategies.
+            </p>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <section id="map-section" class="mb-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">U.S. Operational Footprint</h2>
+            <div class="bg-white p-2 rounded-lg shadow-md">
+                <div id="map" class="h-[400px] md:h-[500px] rounded-md z-0"></div>
+            </div>
+        </section>
+
+        <!-- Company Directory Section -->
+        <section id="directory-section">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Company Directory</h2>
+            
+            <!-- Filters and Search -->
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6 sticky top-[65px] z-30">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-1">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="Search by name, specialty, location..." class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-slate-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div id="tag-filters" class="flex flex-wrap items-center gap-2">
+                            <span class="font-semibold text-slate-700 mr-2">Filter by Specialty:</span>
+                            <!-- Filter tags will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Cards Grid -->
+            <div id="company-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Company cards will be dynamically inserted here -->
+            </div>
+             <div id="no-results" class="hidden text-center py-12">
+                <i class="fas fa-folder-open text-4xl text-slate-400 mb-4"></i>
+                <p class="text-xl font-semibold text-slate-600">No companies found.</p>
+                <p class="text-slate-500">Try adjusting your search or filter criteria.</p>
+            </div>
+        </section>
+
+        <!-- Strategic Insights Section -->
+        <section id="insights-section" class="mt-12">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Strategic Insights: Pathways to the U.S. Market</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-shopping-cart text-2xl text-blue-500 mr-4"></i>
+                        <h3 class="text-lg font-semibold text-slate-800">The "Buy" Approach (M&A)</h3>
+                    </div>
+                    <p class="text-slate-600">Acquiring U.S. assets for immediate scale, manufacturing capacity, and market presence. Exemplified by <span class="font-semibold">Bora Pharmaceuticals</span>.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-flag-usa text-2xl text-red-500 mr-4"></i>
+                        <h3 class="text-lg font-semibold text-slate-800">The "Made in USA" Approach</h3>
+                    </div>
+                    <p class="text-slate-600">Onshoring final production steps to mitigate trade risks and secure market access. Used by <span class="font-semibold">PharmaEssentia</span> and <span class="font-semibold">StemCyte</span>.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-lightbulb text-2xl text-yellow-500 mr-4"></i>
+                        <h3 class="text-lg font-semibold text-slate-800">The "Innovate" Approach (R&D)</h3>
+                    </div>
+                    <p class="text-slate-600">Leading with novel technology and validating it with premier U.S. institutions like the Mayo Clinic. A strategy used by <span class="font-semibold">JelloX Biotech</span>.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white mt-12">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-slate-400">
+            <p>Data sourced from the "Taiwan-U.S. Biotech Bridge" report. This is an informational tool and not financial advice.</p>
+            <p class="text-sm mt-1">Application developed for interactive research and exploration.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // --- DATA ---
+        // Data extracted from the report's Master Table
+        const companyData = [
+            {
+                name: "AltruBio, Inc.",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "San Francisco / Redwood City, CA", coords: [37.54, -122.26] }],
+                specialization: "Immunology, Antibody Therapeutics",
+                activity: "Raised $225M Series B led by U.S. VCs (BVF, RA Capital) for Phase 2 UC trial.",
+                website: "https://www.altrubio.com"
+            },
+            {
+                name: "Bora Pharmaceuticals",
+                hqTaiwan: "Taipei, Tainan",
+                usLocations: [
+                    { name: "Maple Grove, MN", coords: [45.07, -93.46] },
+                    { name: "Gaithersburg, MD", coords: [39.14, -77.20] },
+                    { name: "New Jersey", coords: [40.22, -74.74] }
+                ],
+                specialization: "CDMO, Specialty Pharma",
+                activity: "Acquired Upsher-Smith (MN), Emergent plant (MD), and Pyros Pharma (NJ).",
+                website: "https://www.bora-corp.com"
+            },
+            {
+                name: "Bora Biologics",
+                hqTaiwan: "Zhubei City",
+                usLocations: [{ name: "San Diego, CA", coords: [32.88, -117.21] }],
+                specialization: "CDMO, Biologics",
+                activity: "Expanded San Diego facility for 2000L+ scale manufacturing.",
+                website: "https://www.borabiologics.com"
+            },
+            {
+                name: "Center Laboratories, Inc.",
+                hqTaiwan: "Taipei",
+                usLocations: [
+                    { name: "Brooklyn, NY", coords: [40.67, -73.94] },
+                    { name: "Cedar Knolls, NJ", coords: [40.82, -74.45] }
+                ],
+                specialization: "Diagnostics, Clinical Lab",
+                activity: "Provides clinical testing services across NY, NJ, and PA.",
+                website: "https://centerslab.com"
+            },
+            {
+                name: "EirGenix Inc.",
+                hqTaiwan: "New Taipei City / Zhubei",
+                usLocations: [], // No specific public office, but significant US activity
+                specialization: "Biologics CDMO, Biosimilars, ADCs",
+                activity: "BLA submitted to U.S. FDA for Trastuzumab biosimilar (licensed to Sandoz). Facilities are U.S. FDA inspected.",
+                website: "https://www.eirgenix.com"
+            },
+            {
+                name: "Ever Supreme Bio Technology",
+                hqTaiwan: "Taichung",
+                usLocations: [], // Unspecified location
+                specialization: "Stem Cells, Regenerative Medicine",
+                activity: "Acquired 48.78% stake in a U.S. stem cell joint venture for clinical trials.",
+                website: "https://www.ever-supreme.com.tw"
+            },
+            {
+                name: "Foresee Pharmaceuticals",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "Newark, DE", coords: [39.68, -75.75] }],
+                specialization: "Oncology, Injectables",
+                activity: "Lead product Camcevi® approved in the U.S.; raised funds from U.S.-based Vivo Capital.",
+                website: "https://www.foreseepharma.com"
+            },
+            {
+                name: "Formosa Pharmaceuticals",
+                hqTaiwan: "Taipei",
+                usLocations: [], // N/A, but FDA approval
+                specialization: "Ophthalmology, Oncology",
+                activity: "Received U.S. FDA approval for APP13007 ophthalmic steroid.",
+                website: "https://www.formosapharma.com"
+            },
+            {
+                name: "JelloX Biotech Inc.",
+                hqTaiwan: "Hsinchu",
+                usLocations: [{ name: "Phoenix, AZ", coords: [33.45, -112.07] }],
+                specialization: "Diagnostics, AI, Digital Pathology",
+                activity: "Collaboration with Mayo Clinic to validate technology.",
+                website: "https://jellox.com"
+            },
+            {
+                name: "Lin BioScience, Inc.",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "San Diego, CA", coords: [32.88, -117.21] }],
+                specialization: "Oncology, Ophthalmology",
+                activity: "Licensed technology from Columbia University and NIH; subsidiary Belite Bio running Phase 3 trial.",
+                website: "https://www.linbioscience.com"
+            },
+            {
+                name: "Lumosa Therapeutics",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "Chattanooga, TN", coords: [35.04, -85.31] }],
+                specialization: "Neurology, Analgesics",
+                activity: "Engaged Camargo Pharmaceutical Services for U.S. regulatory consulting.",
+                website: null
+            },
+             {
+                name: "Mycenax Biotech",
+                hqTaiwan: "Hsinchu",
+                usLocations: [{ name: "Fremont, CA", coords: [37.54, -121.98] }],
+                specialization: "Biologics CDMO, mAbs, ADCs",
+                activity: "Strategic CDMO transformation, RIN licensing deal, and Japanese market expansion.",
+                website: "https://www.mycenax.com"
+            },
+            {
+                name: "Medigen Vaccine Biologics",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "Frederick, MD", coords: [39.41, -77.41] }],
+                specialization: "Vaccines, Biosimilars",
+                activity: "U.S. office supports business development and collaboration with U.S. partners like NIH.",
+                website: "https://www.medigenvac.com"
+            },
+            {
+                name: "OBI Pharma, Inc.",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "San Diego, CA", coords: [32.88, -117.21] }],
+                specialization: "Oncology, ADCs",
+                activity: "Received FDA orphan-drug designation for ADC OBI-992 in gastric cancer.",
+                website: null
+            },
+            {
+                name: "PharmaEssentia",
+                hqTaiwan: "Taichung",
+                usLocations: [{ name: "Burlington, MA", coords: [42.50, -71.19] }],
+                specialization: "Oncology, Rare Disease",
+                activity: "Utilizes U.S.-based fill/finish to qualify drug as 'Made in USA'.",
+                website: "https://us.pharmaessentia.com"
+            },
+            {
+                name: "REGiMMUNE",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "Marina Del Rey, CA", coords: [33.98, -118.45] }],
+                specialization: "Immunology, Tregs",
+                activity: "Past collaboration with Pfizer and JDRF; announced merger with Kiji Therapeutics.",
+                website: "https://regimmune.com"
+            },
+            {
+                name: "ScinoPharm Taiwan, Ltd.",
+                hqTaiwan: "Tainan",
+                usLocations: [{ name: "New York, NY", coords: [40.71, -74.00] }],
+                specialization: "CDMO, API Manufacturing",
+                activity: "Uses Biddle Sawyer Corporation as its exclusive distributor for the NAFTA region.",
+                website: "https://www.scinopharm.com"
+            },
+            {
+                name: "Senhwa Biosciences, Inc.",
+                hqTaiwan: "New Taipei City",
+                usLocations: [{ name: "San Diego, CA", coords: [32.88, -117.21] }],
+                specialization: "Oncology, Rare Disease",
+                activity: "Collaborating with U.S. National Cancer Institute (NCI) on clinical studies.",
+                website: "https://www.senhwabio.com"
+            },
+            {
+                name: "StemCyte",
+                hqTaiwan: "N/A (Global Co.)",
+                usLocations: [{ name: "Baldwin Park, CA", coords: [34.08, -117.96] }],
+                specialization: "Stem Cells, Regenerative Medicine",
+                activity: "Received first-ever FDA approval for an umbilical cord blood stem cell therapy (RegeneCyte™).",
+                website: "https://www.stemcyte.com"
+            },
+            {
+                name: "Steminent Biotherapeutics",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "San Diego, CA", coords: [32.88, -117.21] }],
+                specialization: "Stem Cells, Neurology",
+                activity: "U.S. office supports R&D and global development efforts.",
+                website: "https://www.steminent.com"
+            },
+            {
+                name: "TaiMed Biologics, Inc.",
+                hqTaiwan: "Taipei",
+                usLocations: [{ name: "Irvine, CA", coords: [33.68, -117.82] }],
+                specialization: "Immunology, HIV/AIDS, CDMO",
+                activity: "U.S. subsidiary supports clinical development; signed CDMO service agreement with a U.S. client.",
+                website: "https://www.taimedbiologics.com"
+            }
+        ];
+
+        // --- GLOBAL VARIABLES ---
+        let map;
+        const companyGrid = document.getElementById('company-grid');
+        const searchInput = document.getElementById('search-input');
+        const tagFiltersContainer = document.getElementById('tag-filters');
+        const noResultsDiv = document.getElementById('no-results');
+        let activeTags = new Set();
+        let markers = [];
+
+        // --- MAP INITIALIZATION ---
+        function initMap() {
+            // Set initial view to center of the US
+            map = L.map('map').setView([39.8283, -98.5795], 4);
+
+            // Add tile layer from OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Add markers for each company location
+            companyData.forEach((company, index) => {
+                company.usLocations.forEach(location => {
+                    if (location && location.coords && location.coords.length === 2) {
+                        const marker = L.marker(location.coords).addTo(map);
+                        marker.bindPopup(`<b>${company.name}</b><br>${location.name}<br><a href="#company-${index}" class="text-blue-600 hover:underline">View Details</a>`);
+                        markers.push({ marker, companyIndex: index });
+                    }
+                });
+            });
+        }
+
+        // --- COMPANY DIRECTORY RENDERING ---
+        function renderCompanyCards(filteredData) {
+            companyGrid.innerHTML = '';
+            if (filteredData.length === 0) {
+                noResultsDiv.classList.remove('hidden');
+            } else {
+                noResultsDiv.classList.add('hidden');
+            }
+
+            filteredData.forEach((company) => {
+                // Find the original index to link from map
+                const originalIndex = companyData.findIndex(c => c.name === company.name);
+
+                const card = document.createElement('div');
+                card.id = `company-${originalIndex}`;
+                card.className = 'company-card bg-white p-6 rounded-lg shadow-md border border-slate-200 flex flex-col';
+                
+                // Create specialties tags
+                const specialtiesHTML = company.specialization.split(', ').map(spec => 
+                    `<span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${spec}</span>`
+                ).join('');
+
+                // Create location list
+                const locationsHTML = company.usLocations.map(loc => 
+                    `<li class="flex items-center"><i class="fas fa-map-marker-alt text-slate-400 w-4 mr-2"></i>${loc.name}</li>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">${company.name}</h3>
+                        <p class="text-sm text-slate-500 mb-4"><i class="fas fa-globe-asia mr-2"></i>HQ: ${company.hqTaiwan}</p>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-slate-700 mb-2">Specialties:</h4>
+                            <div class="flex flex-wrap">${specialtiesHTML}</div>
+                        </div>
+
+                        ${locationsHTML ? `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-slate-700 mb-2">U.S. Locations:</h4>
+                            <ul class="text-slate-600 space-y-1">${locationsHTML}</ul>
+                        </div>` : '<div class="mb-4"><h4 class="font-semibold text-slate-700 mb-2">U.S. Locations:</h4><p class="text-slate-600">N/A (Direct U.S. Regulatory Engagement)</p></div>'}
+
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-slate-700 mb-2">Key U.S. Activity:</h4>
+                            <p class="text-slate-600">${company.activity}</p>
+                        </div>
+                    </div>
+                    ${company.website ? `
+                    <div class="mt-auto pt-4 border-t border-slate-200">
+                        <a href="${company.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                            Visit Website <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>` : ''}
+                `;
+                companyGrid.appendChild(card);
+            });
+        }
+
+        // --- FILTERING AND SEARCH LOGIC ---
+        function filterAndRender() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filteredData = companyData.filter(company => {
+                // Search logic
+                const matchesSearch = searchTerm === '' ||
+                    company.name.toLowerCase().includes(searchTerm) ||
+                    company.specialization.toLowerCase().includes(searchTerm) ||
+                    company.usLocations.some(loc => loc.name.toLowerCase().includes(searchTerm));
+
+                // Tag filtering logic
+                const companyTags = new Set(company.specialization.toLowerCase().split(', ').map(s => s.trim()));
+                const matchesTags = activeTags.size === 0 || 
+                    [...activeTags].every(tag => companyTags.has(tag.toLowerCase()));
+
+                return matchesSearch && matchesTags;
+            });
+
+            renderCompanyCards(filteredData);
+        }
+
+        // --- INITIALIZE FILTERS ---
+        function initFilters() {
+            const allSpecialties = new Set();
+            companyData.forEach(company => {
+                company.specialization.split(', ').forEach(spec => {
+                    allSpecialties.add(spec.trim());
+                });
+            });
+
+            // Add an "All" tag
+            const allTag = document.createElement('span');
+            allTag.className = 'tag bg-blue-500 text-white font-semibold px-3 py-1 rounded-full';
+            allTag.textContent = 'All';
+            allTag.dataset.tag = 'All';
+            allTag.addEventListener('click', () => {
+                activeTags.clear();
+                document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+                allTag.classList.add('active');
+                filterAndRender();
+            });
+            tagFiltersContainer.appendChild(allTag);
+
+
+            [...allSpecialties].sort().forEach(spec => {
+                const tag = document.createElement('span');
+                tag.className = 'tag bg-slate-200 text-slate-700 px-3 py-1 rounded-full';
+                tag.textContent = spec;
+                tag.dataset.tag = spec;
+                tag.addEventListener('click', () => {
+                    document.querySelector('.tag[data-tag="All"]').classList.remove('active');
+                    tag.classList.toggle('active');
+                    if (activeTags.has(spec)) {
+                        activeTags.delete(spec);
+                    } else {
+                        activeTags.add(spec);
+                    }
+                    if (activeTags.size === 0) {
+                        document.querySelector('.tag[data-tag="All"]').classList.add('active');
+                    }
+                    filterAndRender();
+                });
+                tagFiltersContainer.appendChild(tag);
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        searchInput.addEventListener('input', filterAndRender);
+        
+        // --- APP INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            initFilters();
+            renderCompanyCards(companyData);
+        });
+
+    </script>
+</body>
+</html>

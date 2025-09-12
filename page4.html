@@ -1,0 +1,1291 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Taiwanese Biotech Companies with a U.S. Presence: An Investment and Partnership Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2d5a87;
+            --accent: #d4af37;
+            --accent-light: #f4e4a6;
+            --text: #2c3e50;
+            --text-light: #64748b;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .serif {
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 50;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f4e4a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-visual {
+            position: relative;
+            height: 400px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+        
+        .subsection-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            color: var(--secondary);
+        }
+        
+        .company-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .company-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .citation {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted var(--accent);
+        }
+        
+        .citation:hover {
+            color: var(--primary);
+            border-bottom-style: solid;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+        
+        /* Mermaid diagram styles */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* 防止触摸设备上的默认行为 */
+            -webkit-user-select: none; /* 防止文本选择 */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+        
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+        
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+        
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+        
+@media (max-width: 1024px) {
+    .toc {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .toc.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .mermaid-control-btn:not(.reset-zoom) {
+        display: none;
+    }
+    .mermaid-controls {
+        top: auto;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  .px-8 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+    <!-- Table of Contents -->
+    <nav class="toc">
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Table of Contents</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="#executive-summary" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">Executive Summary</a>
+          </li>
+          <li>
+            <a href="#overview" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">1. Overview</a>
+          </li>
+          <li>
+            <a href="#strategic-drivers" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">1.1 Strategic Drivers</a>
+          </li>
+          <li>
+            <a href="#expansion-models" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">1.2 Expansion Models</a>
+          </li>
+          <li>
+            <a href="#companies-list" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">2. Companies List</a>
+          </li>
+          <li>
+            <a href="#physical-presence" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">2.1 Physical Presence</a>
+          </li>
+          <li>
+            <a href="#virtual-engagement" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">2.2 Virtual Engagement</a>
+          </li>
+          <li>
+            <a href="#company-profiles" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3. Company Profiles</a>
+          </li>
+          <li>
+            <a href="#bora-pharma" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3.1 Bora Pharmaceuticals</a>
+          </li>
+          <li>
+            <a href="#pharmaessentia" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3.2 PharmaEssentia</a>
+          </li>
+          <li>
+            <a href="#stemcyte" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3.3 StemCyte</a>
+          </li>
+          <li>
+            <a href="#formosa-pharma" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3.4 Formosa Pharmaceuticals</a>
+          </li>
+          <li>
+            <a href="#obi-pharma" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">3.5 OBI Pharma</a>
+          </li>
+          <li>
+            <a href="#emerging-trends" class="block py-1 px-2 rounded hover:bg-gray-100 transition-colors">4. Emerging Trends</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container mx-auto px-8 py-16">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1 class="hero-title serif italic">Taiwanese Biotech Companies with a U.S. Presence</h1>
+              <p class="hero-subtitle">An Investment and Partnership Guide</p>
+              <div class="flex items-center space-x-4 text-sm opacity-80">
+                <span><i class="fas fa-calendar mr-2"></i>June 2025</span>
+                <span><i class="fas fa-chart-line mr-2"></i>Market Analysis</span>
+                <span><i class="fas fa-globe mr-2"></i>Global Expansion</span>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <img src="https://kimi-web-img.moonshot.cn/img/www.nowleap.com/ec2c0ccfab930cde0e67a50e26bbbf8f6af6fd22.jpg" alt="Modern biotechnology laboratory with researchers" class="w-full h-full object-cover" size="large" aspect="wide" style="photo" query="modern biotechnology laboratory" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section id="executive-summary" class="py-16 px-8">
+        <div class="container mx-auto max-w-4xl">
+          <div class="highlight-box">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Executive Summary</h2>
+            <p class="text-lg leading-relaxed">
+              Taiwanese biotech companies are increasingly establishing a significant presence in the United States, driven by strategic imperatives to access the world&#39;s largest pharmaceutical market, navigate U.S. tariff policies, and leverage the &#34;Made in USA&#34; advantage. This comprehensive analysis identifies <strong>12 key companies</strong> with active U.S. operations across multiple expansion models, presenting substantial opportunities for U.S. investors and partners.
+            </p>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-number">$23.3B</div>
+              <div class="stat-label">Taiwan Biotech Revenue (2023)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">172</div>
+              <div class="stat-label">MOEA-Recognized Biotech Firms</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">12</div>
+              <div class="stat-label">Companies with U.S. Presence</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">$32B</div>
+              <div class="stat-label">Target Economy by 2025</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Overview Section -->
+      <section id="overview" class="py-16 px-8 bg-white">
+        <div class="container mx-auto max-w-4xl">
+          <h2 class="section-title serif">Overview of Taiwanese Biotech Expansion into the U.S.</h2>
+
+          <p class="text-lg mb-6">
+            The Taiwanese biotechnology sector has evolved from a regional player into a globally competitive force, marked by strategic expansion into the United States. This evolution represents the culmination of decades of government support, R&amp;D investment, and strategic vision to integrate Taiwan&#39;s manufacturing strengths with U.S. market opportunities.
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-8 my-12">
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">Government Support Framework</h3>
+              <p class="text-gray-600 mb-4">
+                The Taiwanese government, through the Ministry of Economic Affairs (MOEA) and its Biotechnology and Pharmaceutical Industries Promotion Office (BPIPO), has been instrumental in fostering industry growth.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• <a href="#" class="citation">[^390]</a> 172 companies recognized as biotech firms by MOEA</li>
+                <li>• Tax credits and R&amp;D subsidies</li>
+                <li>• Taiwan Biotech Takeoff Plan (2009)</li>
+              </ul>
+            </div>
+
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">Market Performance</h3>
+              <p class="text-gray-600 mb-4">
+                The sector has achieved significant growth, with total revenues reaching approximately $23.3 billion in 2023 and ambitions to grow into a $32 billion economy.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• <a href="#" class="citation">[^394]</a> Strong foundation in precision medicine</li>
+                <li>• Immunotherapy and digital health expertise</li>
+                <li>• Global integration strategy</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Expansion Strategy Diagram -->
+          <div class="my-12">
+            <h3 class="text-xl font-semibold mb-6 text-center">Taiwanese Biotech U.S. Expansion Strategy</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TD
+                A[&#34;Taiwanese Biotech Companies&#34;] --&gt; B[&#34;U.S. Market Entry&#34;]
+                B --&gt; C[&#34;Acquisitions&#34;]
+                B --&gt; D[&#34;Subsidiaries&#34;]
+                B --&gt; E[&#34;Partnerships&#34;]
+                B --&gt; F[&#34;CDMO Services&#34;]
+
+                C --&gt; G[&#34;Bora: Upsher-Smith, Emergent&#34;]
+                C --&gt; H[&#34;YungShin: Carlsbad Technology&#34;]
+
+                D --&gt; I[&#34;PharmaEssentia: MA&#34;]
+                D --&gt; J[&#34;OBI Pharma: San Diego&#34;]
+                D --&gt; K[&#34;Formosa: La Jolla&#34;]
+
+                E --&gt; L[&#34;TaiMed + Theratechnologies&#34;]
+                E --&gt; M[&#34;AB DigiHealth + U.S. Partners&#34;]
+
+                F --&gt; N[&#34;Tanvex CDMO&#34;]
+                F --&gt; O[&#34;KriSan Biotech&#34;]
+
+                style A fill:#1e3a5f,stroke:#ffffff,stroke-width:2px,color:#ffffff
+                style B fill:#2d5a87,stroke:#ffffff,stroke-width:2px,color:#ffffff
+                style C fill:#d4af37,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style D fill:#d4af37,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style E fill:#d4af37,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style F fill:#d4af37,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style G fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style H fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style I fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style J fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style K fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style L fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style M fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style N fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+                style O fill:#f4e4a6,stroke:#1e3a5f,stroke-width:2px,color:#1e3a5f
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Strategic Drivers -->
+      <section id="strategic-drivers" class="py-16 px-8">
+        <div class="container mx-auto max-w-4xl">
+          <h2 class="section-title serif">Strategic Drivers for U.S. Market Entry</h2>
+
+          <div class="grid md:grid-cols-3 gap-8 my-12">
+            <div class="company-card">
+              <div class="text-accent text-3xl mb-4">
+                <i class="fas fa-flag-usa"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">&#34;Made in USA&#34; Advantage</h3>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^427]</a> The U.S. BioSecure Act has created opportunities for Taiwanese companies with U.S. operations to position themselves as &#34;friend-shored&#34; alternatives to Chinese manufacturers.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• Avoid potential tariffs and trade barriers</li>
+                <li>• Qualify for government contracts</li>
+                <li>• Enhanced brand reputation</li>
+              </ul>
+            </div>
+
+            <div class="company-card">
+              <div class="text-accent text-3xl mb-4">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Tariff Policy Navigation</h3>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^422]</a> U.S. tariff policies have prompted Taiwanese companies to establish physical presence, mitigating supply chain risks and ensuring cost-effective market access.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• Supply chain resilience</li>
+                <li>• Cost optimization</li>
+                <li>• Competitive positioning</li>
+              </ul>
+            </div>
+
+            <div class="company-card">
+              <div class="text-accent text-3xl mb-4">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Market Access</h3>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^423]</a> The U.S. offers access to the world&#39;s largest pharmaceutical market, sophisticated clinical trial infrastructure, and deep investment capital pools.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• FDA approval as global validation</li>
+                <li>• Large patient populations</li>
+                <li>• Investment capital access</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Expansion Models -->
+      <section id="expansion-models" class="py-16 px-8 bg-white">
+        <div class="container mx-auto max-w-4xl">
+          <h2 class="section-title serif">Common U.S. Expansion Models</h2>
+
+          <div class="space-y-8">
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-building text-accent mr-3"></i>Acquisitions of U.S. Companies
+              </h3>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^422]</a> Direct acquisitions provide immediate access to established manufacturing capabilities, regulatory expertise, and distribution networks.
+              </p>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <strong>Case Study: Bora Pharmaceuticals</strong>
+                <ul class="text-sm mt-2 space-y-1">
+                  <li>• Acquired Upsher-Smith Laboratories (Minnesota)</li>
+                  <li>• Purchased Emergent BioSolutions facility (Maryland)</li>
+                  <li>• Acquired Pyros Pharmaceuticals (New Jersey)</li>
+                  <li>• Total investment: NT$8.58 billion</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-map-marker-alt text-accent mr-3"></i>Establishing Subsidiaries and Offices
+              </h3>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^428]</a> Measured entry through subsidiaries allows companies to build presence gradually while maintaining operational control.
+              </p>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <strong>Key Locations:</strong>
+                <ul class="text-sm mt-2 space-y-1">
+                  <li>• San Diego, CA (PapiVax, OBI Pharma, Tanvex)</li>
+                  <li>• San Francisco Bay Area (HanchorBio, Elixiron)</li>
+                  <li>• Burlington, MA (PharmaEssentia)</li>
+                  <li>• Ontario, CA (CH Biotech)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Companies List -->
+      <section id="companies-list" class="py-16 px-8">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="section-title serif">Comprehensive List of Taiwanese Biotech Companies with U.S. Operations</h2>
+
+          <div class="space-y-12">
+            <!-- Physical Presence Companies -->
+            <div id="physical-presence">
+              <h3 class="subsection-title serif">Companies with Physical U.S. Offices, Facilities, or Subsidiaries</h3>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">Bora Pharmaceuticals</h4>
+                    <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">Acquisition Strategy</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Locations:</strong> Minnesota, Maryland, New Jersey</p>
+                    <p><strong>Specialization:</strong> Generic drugs, sterile injectables, rare diseases</p>
+                    <p><strong>Recent Activity:</strong>
+                      <a href="#" class="citation">[^29]</a> Acquired Upsher-Smith, Emergent facility, Pyros Pharmaceuticals
+                    </p>
+                    <p><strong>Leadership:</strong> Chairman Bobby Sheng</p>
+                    <p><strong>Website:</strong>
+                      <a href="https://www.borapharma.com/" class="citation">borapharma.com</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">PharmaEssentia Corporation</h4>
+                    <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Public (TWSE: 6446)</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Location:</strong> Burlington, MA</p>
+                    <p><strong>Specialization:</strong> Hematology, oncology, immunology</p>
+                    <p><strong>Key Product:</strong> Ropeginterferon alfa-2b (Ropeg)</p>
+                    <p><strong>Leadership:</strong> CEO Ko-Chung Lin, Ph.D.</p>
+                    <p><strong>Website:</strong>
+                      <a href="https://www.pharmaessentia.com/" class="citation">pharmaessentia.com</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">StemCyte</h4>
+                    <span class="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded">Stem Cell Therapy</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Locations:</strong> Covina, CA; Baldwin Park, CA</p>
+                    <p><strong>Specialization:</strong> Umbilical cord blood stem cell therapy</p>
+                    <p><strong>FDA Status:</strong>
+                      <a href="#" class="citation">[^381]</a> First FDA-approved cord blood therapy
+                    </p>
+                    <p><strong>Leadership:</strong> CEO Kenneth J. Giacin</p>
+                    <p><strong>Website:</strong>
+                      <a href="https://www.stemcyte.com/" class="citation">stemcyte.com</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">Formosa Pharmaceuticals</h4>
+                    <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">FDA Approved</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Location:</strong> La Jolla, CA (U.S. Agent)</p>
+                    <p><strong>Specialization:</strong> Ophthalmology, oncology</p>
+                    <p><strong>FDA Approval:</strong>
+                      <a href="#" class="citation">[^167]</a> APP13007 (ophthalmic steroid)
+                    </p>
+                    <p><strong>Leadership:</strong> Dr. Chen-Yu Cheng, Founder &amp; President</p>
+                    <p><strong>Website:</strong>
+                      <a href="https://www.formosapharma.com/" class="citation">formosapharma.com</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Virtual Engagement Companies -->
+            <div id="virtual-engagement">
+              <h3 class="subsection-title serif">Companies with U.S. Virtual Offices or Active Market Engagement</h3>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">Jyong Biotech Ltd.</h4>
+                    <span class="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">Nasdaq: MENS</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Presence:</strong> Nasdaq IPO (June 2025), $20M raised</p>
+                    <p><strong>Specialization:</strong> Plant-derived drugs for urinary system</p>
+                    <p><strong>Flagship Product:</strong> MCS®-2 for BPH treatment</p>
+                    <p><strong>U.S. Agent:</strong> Cogency Global Inc., New York</p>
+                  </div>
+                </div>
+
+                <div class="company-card">
+                  <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">Oneness Biotech</h4>
+                    <span class="text-sm bg-indigo-100 text-indigo-800 px-2 py-1 rounded">Acquisition Strategy</span>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <p><strong>U.S. Strategy:</strong>
+                      <a href="#" class="citation">[^209]</a> Planned acquisition of U.S. wound care company
+                    </p>
+                    <p><strong>Specialization:</strong> Diabetic foot ulcers (Fespixon/ON101)</p>
+                    <p><strong>Funding:</strong> Diamond BioFund ($200M capital)</p>
+                    <p><strong>Regulatory:</strong>
+                      <a href="#" class="citation">[^211]</a> BARDA Project NextGen application
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Company Profiles -->
+      <section id="company-profiles" class="py-16 px-8 bg-white">
+        <div class="container mx-auto max-w-4xl">
+          <h2 class="section-title serif">Detailed Company Profiles</h2>
+
+          <!-- Bora Pharmaceuticals -->
+          <div id="bora-pharma" class="mb-16">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Bora Pharmaceuticals</h3>
+
+            <div class="company-card">
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Company Overview</h4>
+              <p class="text-gray-600 mb-4">
+                Bora Pharmaceuticals has emerged as a formidable player through an aggressive acquisition strategy, rapidly scaling U.S. manufacturing capacity and diversifying service offerings.
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Strategic Acquisitions</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <ul class="space-y-2">
+                  <li><strong>Upsher-Smith Laboratories:</strong>
+                    <a href="#" class="citation">[^29]</a> Largest pharmaceutical manufacturer in Minnesota
+                  </li>
+                  <li><strong>Emergent BioSolutions Facility:</strong> Sterile injectable plant in Gaithersburg, MD</li>
+                  <li><strong>Pyros Pharmaceuticals:</strong> Rare disease drug developer in New Jersey</li>
+                  <li><strong>Total Investment:</strong> NT$8.58 billion (2024)</li>
+                </ul>
+              </div>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Market Position</h4>
+              <p class="text-gray-600">
+                <a href="#" class="citation">[^606]</a> Comprehensive production footprint spanning oral solid dosage forms, injectables, and biologics. Steady rise in CDMO orders with trajectory toward becoming a top-ten global CDMO provider.
+              </p>
+            </div>
+          </div>
+
+          <!-- PharmaEssentia -->
+          <div id="pharmaessentia" class="mb-16">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">PharmaEssentia Corporation</h3>
+
+            <div class="company-card">
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Company Overview</h4>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^32]</a> Founded in 2003 by Taiwanese-American executives and scientists from leading U.S. biotech companies. Fully integrated global biopharmaceutical company focused on hematology, oncology, and immunology.
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">U.S. Operations</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <ul class="space-y-2">
+                  <li><strong>Location:</strong>
+                    <a href="#" class="citation">[^42]</a> Burlington, Massachusetts
+                  </li>
+                  <li><strong>Manufacturing:</strong>
+                    <a href="#" class="citation">[^4]</a> Final filling process in U.S. facility (API from Taiwan)
+                  </li>
+                  <li><strong>Regulatory:</strong> Besremi approved in U.S. and Europe for polycythemia vera</li>
+                  <li><strong>Global Presence:</strong> Operations in Japan, China, and Korea</li>
+                </ul>
+              </div>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Financial Performance</h4>
+              <p class="text-gray-600">
+                <a href="#" class="citation">[^39]</a> Publicly traded on Taiwan Stock Exchange (TWSE: 6446). Strong revenue growth driven by successful U.S. and European market launches.
+              </p>
+            </div>
+          </div>
+
+          <!-- StemCyte -->
+          <div id="stemcyte" class="mb-16">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">StemCyte</h3>
+
+            <div class="company-card">
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Company Overview</h4>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^4]</a> Global leader in stem cell therapy with fully operational GMP-compliant manufacturing site in California and established U.S. commercial presence.
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Regulatory Achievements</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <ul class="space-y-2">
+                  <li><strong>FDA Approval:</strong>
+                    <a href="#" class="citation">[^381]</a> First company with FDA market authorization for umbilical cord blood stem cell therapy
+                  </li>
+                  <li><strong>Product:</strong> RegeneCyte (cord blood stem cell therapy)</li>
+                  <li><strong>Accreditations:</strong> FDA, AABB, and FACT certified</li>
+                  <li><strong>Facilities:</strong> State-of-the-art GMP manufacturing in California</li>
+                </ul>
+              </div>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Clinical Focus</h4>
+              <p class="text-gray-600">
+                Specialized in umbilical cord blood and cord tissue-based therapies for neurological disorders, autoimmune diseases, and other serious conditions. Pipeline includes multiple promising therapies in clinical development.
+              </p>
+            </div>
+          </div>
+
+          <!-- Formosa Pharmaceuticals -->
+          <div id="formosa-pharma" class="mb-16">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Formosa Pharmaceuticals</h3>
+
+            <div class="company-card">
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Company Overview</h4>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^524]</a> Clinical-stage biopharmaceutical company founded in 2010, focused on novel drugs and formulations for ophthalmology and oncology.
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">FDA Approval</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <ul class="space-y-2">
+                  <li><strong>Product:</strong>
+                    <a href="#" class="citation">[^527]</a> APP13007 (Clobetasol Propionate ophthalmic suspension 0.05%)
+                  </li>
+                  <li><strong>Indication:</strong> Post-operative inflammation and pain following ocular surgery</li>
+                  <li><strong>Approval Date:</strong> March 2024</li>
+                  <li><strong>Technology:</strong> Activus Pure Nanoparticle Technology (APNT)</li>
+                </ul>
+              </div>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Strategic Partnerships</h4>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^167]</a> Licensed U.S. commercial rights for APP13007 to Eyenovia. Previously licensed Greater China rights to Grand Pharma in 2021.
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Leadership</h4>
+              <p class="text-gray-600">
+                <a href="#" class="citation">[^526]</a> Led by Founder, Chairman, and President Dr. Chen-Yu Cheng, with CEO Dr. Erick Co overseeing operations.
+              </p>
+            </div>
+          </div>
+
+          <!-- OBI Pharma -->
+          <div id="obi-pharma" class="mb-16">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">OBI Pharma, Inc.</h3>
+
+            <div class="company-card">
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Company Overview</h4>
+              <p class="text-gray-600 mb-4">
+                <a href="#" class="citation">[^88]</a> Founded in 2002 with mission to improve health through innovative cancer therapeutics. Publicly traded on Taipei Exchange (TPEx: 4174).
+              </p>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">U.S. Operations</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <ul class="space-y-2">
+                  <li><strong>Location:</strong>
+                    <a href="#" class="citation">[^149]</a> San Diego, California
+                  </li>
+                  <li><strong>Contact:</strong> +1-619-537-7698 | info@obipharma.com</li>
+                  <li><strong>Focus:</strong> Clinical development, regulatory affairs, business development</li>
+                  <li><strong>FDA Designation:</strong>
+                    <a href="#" class="citation">[^69]</a> Orphan drug status for OBI-992 (gastric cancer)
+                  </li>
+                </ul>
+              </div>
+
+              <h4 class="text-lg font-semibold mb-4 text-gray-700">Technology Platform</h4>
+              <p class="text-gray-600">
+                Specialized in antibody-drug conjugates (ADCs) targeting Globo Series antigens (Globo H, SSEA-4) and AKR1C3 enzyme. Lead product OBI-999 is first-in-class ADC targeting Globo H.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Emerging Trends -->
+      <section id="emerging-trends" class="py-16 px-8">
+        <div class="container mx-auto max-w-4xl">
+          <h2 class="section-title serif">Emerging Trends and Future Outlook</h2>
+
+          <div class="grid md:grid-cols-2 gap-8 my-12">
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">Investment Opportunities</h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>CDMO sector growth driven by U.S. outsourcing trends</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>Strategic partnerships for market entry and technology transfer</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>M&amp;A opportunities in manufacturing and distribution</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="company-card">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">Regulatory Landscape</h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>FDA approval as global validation standard</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>
+                    <a href="#" class="citation">[^427]</a> BioSecure Act creating &#34;friend-shored&#34; opportunities
+                  </span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+                  <span>Orphan drug designations for niche therapies</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="highlight-box">
+            <h3 class="text-xl font-semibold mb-4">Key Takeaways for U.S. Investors and Partners</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+              <div>
+                <h4 class="font-semibold mb-2 text-gray-800">Market Access</h4>
+                <p class="text-sm text-gray-600">Taiwanese companies offer proven manufacturing capabilities and regulatory expertise for U.S. market entry</p>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-gray-800">Innovation Pipeline</h4>
+                <p class="text-sm text-gray-600">Strong R&amp;D capabilities in precision medicine, immunotherapy, and biologics development</p>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-gray-800">Strategic Positioning</h4>
+                <p class="text-sm text-gray-600">Geopolitical advantages as &#34;friend-shored&#34; alternative to Chinese manufacturers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-12 px-8 bg-gray-900 text-white">
+        <div class="container mx-auto max-w-4xl">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-4">Taiwanese Biotech Companies with U.S. Presence</h3>
+            <p class="text-gray-400 mb-6">Investment and Partnership Opportunities</p>
+            <div class="flex justify-center space-x-6 text-sm text-gray-400">
+              <span>Analysis Date: June 2025</span>
+              <span>•</span>
+              <span>Source: Company reports, regulatory filings, industry analysis</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Mermaid with custom configuration
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#1e3a5f',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#ffffff',
+                lineColor: '#2d5a87',
+                secondaryColor: '#2d5a87',
+                tertiaryColor: '#d4af37',
+                background: '#fafafa',
+                mainBkg: '#ffffff',
+                secondaryBkg: '#f4e4a6',
+                tertiaryBkg: '#e2e8f0',
+                // Enhanced contrast settings
+                nodeBorder: '#1e3a5f',
+                clusterBkg: '#f8fafc',
+                clusterBorder: '#64748b',
+                defaultLinkColor: '#2d5a87',
+                titleColor: '#1e3a5f',
+                edgeLabelBackground: '#ffffff',
+                // Text colors for different node types
+                textColor: '#1e3a5f',
+                nodeTextColor: '#1e3a5f'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            },
+            fontSize: 14,
+            fontFamily: 'Inter, sans-serif'
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize Mermaid controls when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMermaidControls();
+        });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.createElement('button');
+        mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        mobileMenuToggle.className = 'fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-lg md:hidden';
+        mobileMenuToggle.onclick = () => {
+            document.querySelector('.toc').classList.toggle('open');
+        };
+        document.body.appendChild(mobileMenuToggle);
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const toc = document.querySelector('.toc');
+            if (!toc || !toc.classList.contains('open')) return;
+            
+            // Check if the click is outside the TOC and not on the mobile menu button
+            if (!toc.contains(event.target) && event.target !== mobileMenuToggle) {
+                toc.classList.remove('open');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+  
+
+</body></html>
