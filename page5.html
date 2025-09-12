@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Antibody Discovery Landscape</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Beige, Slate, Muted Teal) -->
+    <!-- Application Structure Plan: A single-page dashboard is chosen for its immediacy and ease of exploration. The structure is designed for a top-down analytical workflow: 1) High-level overview with key metrics and charts (KPIs, Stage Distribution, Geographic Spread). 2) Interactive exploration via filters and a searchable summary table. 3) Deep-dive into a specific company with a dynamic detail view that updates on selection. This non-linear, user-driven flow is more effective for due diligence than a static report, allowing users to compare companies and explore data based on their own criteria (e.g., "show me all Phase 1 companies in the UK"). -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Company counts, clinical stages, locations. -> Goal: Inform (Overview). -> Viz/Method: KPI cards and Donut/Bar charts (Chart.js). -> Interaction: Hover tooltips for details. -> Justification: Provides an immediate, quantitative snapshot of the landscape.
+        - Report Info: Full company list. -> Goal: Organize/Compare. -> Viz/Method: Interactive HTML Table. -> Interaction: Text search, dropdown filtering (by area, stage), and row selection. -> Justification: The core tool for user-driven exploration and comparison.
+        - Report Info: Detailed company data (platform, funding, projection). -> Goal: Inform (Details). -> Viz/Method: Dynamic HTML content blocks. -> Interaction: Content updates on table row click. -> Justification: Presents comprehensive information for a selected company without navigating away, maintaining context.
+        - All charts are rendered on Canvas via Chart.js, adhering to the no-SVG constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .table-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .table-scrollbar::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 10px;
+        }
+        .table-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-800">AI Antibody Discovery Landscape</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">An interactive dashboard for due diligence on leading companies using AI to engineer novel antibody therapeutics. Explore company pipelines, partnerships, and future outlooks.</p>
+        </header>
+
+        <main>
+            <section id="kpis" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            </section>
+            
+            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                 <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-700">Companies by Clinical Stage</h3>
+                    <div class="chart-container">
+                        <canvas id="stageChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-700">Geographic Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="geoChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+
+            <section id="explorer" class="bg-white p-6 rounded-2xl shadow-sm mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-slate-700">Company Explorer</h2>
+                <div class="flex flex-wrap gap-4 mb-6 items-center">
+                    <div class="flex-grow min-w-[200px]">
+                        <label for="search" class="sr-only">Search</label>
+                        <input type="text" id="search" placeholder="Search by company name..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div class="flex-grow min-w-[150px]">
+                        <label for="stageFilter" class="sr-only">Filter by Stage</label>
+                        <select id="stageFilter" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+                            <option value="all">All Clinical Stages</option>
+                        </select>
+                    </div>
+                    <div class="flex-grow min-w-[150px]">
+                        <label for="areaFilter" class="sr-only">Filter by Therapeutic Area</label>
+                        <select id="areaFilter" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+                            <option value="all">All Therapeutic Areas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto table-scrollbar">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Headquarters</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latest Stage</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Therapeutic Focus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companyTable" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="detailView" class="min-h-[300px]">
+                 <div id="detailPlaceholder" class="flex items-center justify-center h-full min-h-[300px] bg-white rounded-2xl shadow-sm text-slate-500">
+                    <p class="text-lg">Select a company from the table to view its detailed profile.</p>
+                </div>
+                <div id="detailContent" class="hidden fade-in"></div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <script>
+        const companyData = [
+            {"Company Name":"Generate:Biomedicines","Headquarters Location":"Somerville, MA, USA","Year Founded":2018,"AI Platform / Technology":"The Generate Platform (Chroma): Generative AI for de novo design of antibodies, peptides, enzymes.","Therapeutic Area Focus":"Broad, with lead in asthma/COPD. Platform is disease-agnostic.","Key Partnerships / Funding Highlights":"Novartis (>$1B potential), Amgen (investor). Raised $273M Series C.","Website":"generatebiomedicines.com","Development Stage":"Phase 1","Projected Progress (Next 12 Months)":"Complete Phase 1 safety/dosing studies and advance to Phase 2. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"Absci","Headquarters Location":"Vancouver, WA, USA","Year Founded":2011,"AI Platform / Technology":"Integrated Drug Creation\u2122 Platform: \"Zero-shot\" generative AI with rapid lab-in-the-loop validation.","Therapeutic Area Focus":"Broad, with lead in Inflammatory Bowel Disease (IBD). Oncology focus.","Key Partnerships / Funding Highlights":"AstraZeneca, Merck. Lead asset ABS-101 in Phase 1 trials.","Website":"absci.com","Development Stage":"Phase 1","Projected Progress (Next 12 Months)":"Complete Phase 1 safety/dosing studies and advance to Phase 2. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Xaira Therapeutics","Headquarters Location":"South San Francisco, CA, USA","Year Founded":2024,"AI Platform / Technology":"End-to-end AI platform based on foundational de novo protein design from Dr. David Baker's lab.","Therapeutic Area Focus":"Unspecified; platform supports multiple modalities.","Key Partnerships / Funding Highlights":"Launched with >$1B in capital from ARCH Venture Partners, Foresite Labs.","Website":"xaira.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Insilico Medicine","Headquarters Location":"Global (HQ: Boston/Cambridge, MA, USA)","Year Founded":2014,"AI Platform / Technology":"Pharma.AI: End-to-end generative AI suite (PandaOmics, Chemistry42) for targets and molecules.","Therapeutic Area Focus":"Broad pipeline in oncology, fibrosis, immunity, CNS, aging.","Key Partnerships / Funding Highlights":"Fosun Pharma, Harbour BioMed. Advanced first generative AI drug to clinic.","Website":"insilico.com","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Vir Biotechnology","Headquarters Location":"San Francisco, CA, USA","Year Founded":2016,"AI Platform / Technology":"dAIsY\u2122 (data AI structure and antibody engineering)","Therapeutic Area Focus":"Infectious Diseases (influenza, HBV, HIV)","Key Partnerships / Funding Highlights":"GSK. Sotrovimab for COVID-19.","Website":"vir.bio","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"A-Alpha Bio","Headquarters Location":"Seattle, WA, USA","Year Founded":2017,"AI Platform / Technology":"AlphaSeq\u2122: High-throughput protein-protein interaction measurement platform.","Therapeutic Area Focus":"Oncology, Immunology, Infectious Disease","Key Partnerships / Funding Highlights":"Amgen, Gilead. $20M Series A.","Website":"aalphabio.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"Alchemab Therapeutics","Headquarters Location":"Cambridge, UK / London, UK","Year Founded":2019,"AI Platform / Technology":"Target-agnostic platform analyzing patient antibodies to find novel targets and drugs.","Therapeutic Area Focus":"Neuroscience, Oncology, Immunology","Key Partnerships / Funding Highlights":"Eli Lilly (Phase I trial for ATX-101), AstraZeneca. $112M total funding. Recent $32M from Schmidt Futures for aging research.","Website":"alchemab.com","Development Stage":"Phase 1","Projected Progress (Next 12 Months)":"Complete Phase 1 safety/dosing studies and advance to Phase 2. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Aulos Bioscience","Headquarters Location":"Larkspur, CA, USA","Year Founded":2021,"AI Platform / Technology":"Leverages Biolojic Design's AI platform for antibody design.","Therapeutic Area Focus":"Immuno-oncology (lead in solid tumors)","Key Partnerships / Funding Highlights":"Biolojic Design (parent/partner). $20M Series A from Apple Tree Partners.","Website":"aulosbio.com","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"LabGenius","Headquarters Location":"London, UK","Year Founded":2012,"AI Platform / Technology":"EVA\u2122: Robotic automation and machine learning for antibody engineering and optimization.","Therapeutic Area Focus":"Solid Tumors (T-cell engagers)","Key Partnerships / Funding Highlights":"Sanofi, Abcam. Raised \u00a335M Series B.","Website":"labgenius.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"BigHat Biosciences","Headquarters Location":"San Mateo, CA, USA","Year Founded":2019,"AI Platform / Technology":"Milliner\u2122 Platform: Integrates wet lab and ML to speed up antibody design and engineering.","Therapeutic Area Focus":"Oncology, Sickle Cell Disease, Inflammation & Immunology","Key Partnerships / Funding Highlights":"Eli Lilly ($50M collaboration), Amgen, Pfizer. $100M Series B. Collaboration with Lilly on novel antibody therapies.","Website":"bighatbio.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"Antiverse","Headquarters Location":"Cardiff, UK","Year Founded":2017,"AI Platform / Technology":"AI-driven antibody drug discovery platform for identifying binders to difficult targets.","Therapeutic Area Focus":"GPCRs, Ion Channels","Key Partnerships / Funding Highlights":"Undisclosed pharma partners. Raised \u00a33M Seed.","Website":"antiverse.io","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"Nabla Bio","Headquarters Location":"Boston, MA, USA","Year Founded":2021,"AI Platform / Technology":"Platform with high-throughput multiplex assays and ML for designing better antibodies.","Therapeutic Area Focus":"Oncology, targeting Claudin 4, CXCR7, etc.","Key Partnerships / Funding Highlights":"AstraZeneca, Bristol Myers Squibb. $26M Seed funding.","Website":"nabla.bio","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"Galux","Headquarters Location":"Shenzhen, China","Year Founded":2022,"AI Platform / Technology":"Generative AI for de novo antibody design.","Therapeutic Area Focus":"Oncology (EGFR, etc.)","Key Partnerships / Funding Highlights":"Undisclosed. Seed funding.","Website":"galux.bio","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"Abzu","Headquarters Location":"Copenhagen, Denmark / Barcelona, Spain","Year Founded":2018,"AI Platform / Technology":"The QLattice\u00ae: Explainable AI for target discovery and hypothesis generation.","Therapeutic Area Focus":"Oncology","Key Partnerships / Funding Highlights":"Undisclosed.","Website":"abzu.ai","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies."},
+            {"Company Name":"Owkin","Headquarters Location":"Paris, France","Year Founded":2016,"AI Platform / Technology":"Federated learning platform for drug discovery and development using patient data.","Therapeutic Area Focus":"Oncology, Cardiovascular Disease","Key Partnerships / Funding Highlights":"Sanofi, Bristol Myers Squibb. $180M Series B.","Website":"owkin.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"PostEra","Headquarters Location":"Boston, MA, USA / London, UK","Year Founded":2019,"AI Platform / Technology":"Manifold Platform: Generative chemistry and synthesis-aware AI for small molecule design (applied to ADCs).","Therapeutic Area Focus":"Oncology (ADCs)","Key Partnerships / Funding Highlights":"Pfizer ($275M ADC deal extension), Amgen, NIH. $24M Series A. Collaboration focuses on AI for antibody-drug conjugates.","Website":"postera.ai","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"Recursion","Headquarters Location":"Salt Lake City, UT, USA","Year Founded":2013,"AI Platform / Technology":"Recursion OS: ML on cellular images to map biology and find novel targets/drugs.","Therapeutic Area Focus":"Broad pipeline in rare diseases, oncology, fibrosis, inflammation.","Key Partnerships / Funding Highlights":"Bayer, Genentech (Roche). Public company (NASDAQ: RXRX).","Website":"recursion.com","Development Stage":"Phase 2/3","Projected Progress (Next 12 Months)":"Advance Phase 2/3 trials, potentially preparing for pivotal studies. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Exscientia","Headquarters Location":"Oxford, UK","Year Founded":2012,"AI Platform / Technology":"Centaur AI\u2122: End-to-end AI platform for designing and developing differentiated medicines.","Therapeutic Area Focus":"Oncology, Immunology, CNS","Key Partnerships / Funding Highlights":"Sanofi, Bristol Myers Squibb. Public company (NASDAQ: EXAI).","Website":"exscientia.ai","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Relay Therapeutics","Headquarters Location":"Cambridge, MA, USA","Year Founded":2016,"AI Platform / Technology":"Dynamo\u2122 platform: Integrates computational and experimental approaches to understand protein motion.","Therapeutic Area Focus":"Oncology","Key Partnerships / Funding Highlights":"Genentech. Public company (NASDAQ: RLAY).","Website":"relaytx.com","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Genesis Therapeutics","Headquarters Location":"Burlingame, CA, USA","Year Founded":2019,"AI Platform / Technology":"GEMS AI Platform: ML for molecular generation, property prediction, and synthesis planning.","Therapeutic Area Focus":"Fibrosis, Inflammation, Oncology","Key Partnerships / Funding Highlights":"Eli Lilly, Genentech. $200M Series B.","Website":"genesistherapeutics.ai","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"Iambic Therapeutics","Headquarters Location":"San Diego, CA, USA","Year Founded":2021,"AI Platform / Technology":"NeuralPLexer\u2122: AI platform combining physics-based molecular dynamics and deep learning.","Therapeutic Area Focus":"Oncology (selective CDK2/4 and HER2 inhibitors)","Key Partnerships / Funding Highlights":"Undisclosed. $100M Series B.","Website":"iambictherapeutics.com","Development Stage":"Phase 1","Projected Progress (Next 12 Months)":"Complete Phase 1 safety/dosing studies and advance to Phase 2. May pursue Series C or strategic collaborations to support later-stage trials."},
+            {"Company Name":"Aqemia","Headquarters Location":"Paris, France","Year Founded":2019,"AI Platform / Technology":"Quantum-inspired physics and generative AI for drug discovery at scale.","Therapeutic Area Focus":"Oncology, Immuno-oncology, RNA targets","Key Partnerships / Funding Highlights":"Sanofi, Servier. $30M Series A.","Website":"aqemia.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Likely to seek Series B or further strategic partnerships to fund clinical development."},
+            {"Company Name":"ProteinQure","Headquarters Location":"Toronto, Ontario, Canada","Year Founded":2014,"AI Platform / Technology":"ProteinStudio\u2122, Quantum annealing, Reinforcement learning, Computational biophysics","Therapeutic Area Focus":"Peptide-drug conjugates, Triple-negative breast cancer","Key Partnerships / Funding Highlights":"Multiple pharma partnerships. First AI-designed peptide therapeutic (PQ203) entering clinical trials.","Website":"proteinqure.com","Development Stage":"Phase 1","Projected Progress (Next 12 Months)":"Complete Phase 1 safety/dosing studies and advance to Phase 2. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"BenevolentAI","Headquarters Location":"London, UK / Cambridge, UK","Year Founded":2013,"AI Platform / Technology":"Benevolent Platform\u2122, AI chemistry design tools","Therapeutic Area Focus":"Oncology, Neurology, Immunology","Key Partnerships / Funding Highlights":"AstraZeneca, Merck KGaA. Public company (Euronext: BAI); $594M Merck partnership.","Website":"benevolent.com","Development Stage":"Phase 2","Projected Progress (Next 12 Months)":"Complete Phase 2, report data, and plan for Phase 3 initiation. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Atomwise","Headquarters Location":"San Francisco, California, USA","Year Founded":2012,"AI Platform / Technology":"AtomNet platform, Deep neural networks for structure-based drug discovery","Therapeutic Area Focus":"Small molecules (with some antibody applications)","Key Partnerships / Funding Highlights":"Sanofi, Bridge Biotherapeutics, GC Pharma. First deep neural network for drug discovery; 15+ quadrillion compound library.","Website":"atomwise.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Schrodinger","Headquarters Location":"New York, USA","Year Founded":1990,"AI Platform / Technology":"Bioluminate, Maestro, AI-powered antibody design and humanization","Therapeutic Area Focus":"Multiple modalities including antibodies","Key Partnerships / Funding Highlights":"CDRD (Canada). Public company (NASDAQ: SDGR); Established computational chemistry platform.","Website":"schrodinger.com","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Expand existing partnerships or announce new discovery deals."},
+            {"Company Name":"Vanderbilt University Medical Center (VUMC)","Headquarters Location":"Nashville, Tennessee, USA","Year Founded":"N/A (Academic)","AI Platform / Technology":"AI-based algorithms for antibody engineering, Massive antibody-antigen atlas","Therapeutic Area Focus":"Multiple disease areas","Key Partnerships / Funding Highlights":"ARPA-H ($30M funding). Academic initiative led by Dr. Ivelin Georgiev; Democratizing antibody discovery.","Website":"vumc.org","Development Stage":"Preclinical","Projected Progress (Next 12 Months)":"Advance lead candidates towards IND-enabling studies. Expand existing partnerships or announce new discovery deals."}
+        ];
+        
+        const STAGE_ORDER = ['Preclinical', 'IND-Enabling', 'Phase 1', 'Phase 2', 'Phase 2/3', 'Phase 3'];
+        const STAGE_COLORS = {
+            'Preclinical': '#A8A29E',
+            'IND-Enabling': '#FBBF24',
+            'Phase 1': '#60A5FA',
+            'Phase 2': '#34D399',
+            'Phase 2/3': '#2DD4BF',
+            'Phase 3': '#A78BFA'
+        };
+
+        let stageChartInstance = null;
+        let geoChartInstance = null;
+        let selectedCompany = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateKPIs();
+            renderStageChart();
+            renderGeoChart();
+            populateFilters();
+            renderTable(companyData);
+            setupEventListeners();
+        });
+
+        function populateKPIs() {
+            const kpiContainer = document.getElementById('kpis');
+            const totalCompanies = companyData.length;
+            const clinicalStageCompanies = companyData.filter(c => c['Development Stage'] !== 'Preclinical' && c['Development Stage'] !== 'IND-Enabling').length;
+            
+            const therapeuticAreas = [...new Set(companyData.flatMap(c => c['Therapeutic Area Focus'].split(/, | \/ /)))];
+            const notableDeals = companyData.filter(c => 
+                c['Company Name'] === 'Alchemab Therapeutics' || 
+                c['Company Name'] === 'BigHat Biosciences' || 
+                c['Company Name'] === 'PostEra'
+            ).length;
+
+            const kpis = [
+                { label: 'Total Companies Analyzed', value: totalCompanies, icon: '🏢' },
+                { label: 'Companies in Clinic', value: clinicalStageCompanies, icon: '⚕️' },
+                { label: 'Distinct Therapeutic Areas', value: therapeuticAreas.length, icon: '🎯' },
+                { label: 'Companies with Notable Deals', value: notableDeals, icon: '🔥' },
+            ];
+
+            kpiContainer.innerHTML = kpis.map(kpi => `
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
+                    <div class="text-4xl mb-2">${kpi.icon}</div>
+                    <div class="text-3xl font-bold text-slate-800">${kpi.value}</div>
+                    <div class="text-slate-500">${kpi.label}</div>
+                </div>
+            `).join('');
+        }
+        
+        function getStageCounts() {
+            const stageCounts = STAGE_ORDER.reduce((acc, stage) => ({ ...acc, [stage]: 0 }), {});
+            companyData.forEach(company => {
+                if (stageCounts.hasOwnProperty(company['Development Stage'])) {
+                    stageCounts[company['Development Stage']]++;
+                }
+            });
+            return stageCounts;
+        }
+
+        function renderStageChart() {
+            const ctx = document.getElementById('stageChart').getContext('2d');
+            const stageCounts = getStageCounts();
+
+            if(stageChartInstance) stageChartInstance.destroy();
+            
+            stageChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(stageCounts),
+                    datasets: [{
+                        data: Object.values(stageCounts),
+                        backgroundColor: Object.keys(stageCounts).map(stage => STAGE_COLORS[stage]),
+                        borderColor: '#FDFBF7',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label + ' companies';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function getGeoCounts() {
+            const geoCounts = {};
+            companyData.forEach(c => {
+                const hq = c['Headquarters Location'];
+                let country = 'Other';
+                if (hq.includes('USA')) country = 'USA';
+                else if (hq.includes('UK')) country = 'UK';
+                else if (hq.includes('France')) country = 'France';
+                else if (hq.includes('China')) country = 'China';
+                else if (hq.includes('Canada')) country = 'Canada';
+                geoCounts[country] = (geoCounts[country] || 0) + 1;
+            });
+            return Object.fromEntries(Object.entries(geoCounts).sort(([,a],[,b]) => b-a));
+        }
+
+        function renderGeoChart() {
+            const ctx = document.getElementById('geoChart').getContext('2d');
+            const geoCounts = getGeoCounts();
+            
+            if(geoChartInstance) geoChartInstance.destroy();
+
+            geoChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(geoCounts),
+                    datasets: [{
+                        label: 'Number of Companies',
+                        data: Object.values(geoCounts),
+                        backgroundColor: '#64748B',
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            beginAtZero: true
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateFilters() {
+            const stageFilter = document.getElementById('stageFilter');
+            STAGE_ORDER.forEach(stage => {
+                const option = document.createElement('option');
+                option.value = stage;
+                option.textContent = stage;
+                stageFilter.appendChild(option);
+            });
+
+            const areaFilter = document.getElementById('areaFilter');
+            const uniqueAreas = [...new Set(companyData.flatMap(c => c['Therapeutic Area Focus'].match(/[\w\s-]+/g)).map(s => s.trim()))]
+                .filter(area => !['and', 'etc', 'with lead in', 'lead in', 'platform is', 'pipeline in', 'targeting', 'selective'].includes(area.toLowerCase()) && area.length > 2)
+                .sort();
+            [...new Set(uniqueAreas)].forEach(area => {
+                const option = document.createElement('option');
+                option.value = area;
+                option.textContent = area;
+                areaFilter.appendChild(option);
+            });
+        }
+        
+        function renderTable(data) {
+            const tableBody = document.getElementById('companyTable');
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-500">No companies match the current filters.</td></tr>`;
+                return;
+            }
+            tableBody.innerHTML = data.map(company => `
+                <tr class="cursor-pointer hover:bg-teal-50" data-company-name="${company['Company Name']}">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">${company['Company Name']}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${company['Headquarters Location']}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full" style="color: ${STAGE_COLORS[company['Development Stage']]}; background-color: ${STAGE_COLORS[company['Development Stage']]}20;">
+                            ${company['Development Stage']}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs">${company['Therapeutic Area Focus']}</td>
+                </tr>
+            `).join('');
+
+            tableBody.querySelectorAll('tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const companyName = row.dataset.companyName;
+                    showDetailView(companyName);
+
+                    if (selectedCompany) {
+                        document.querySelector(`[data-company-name="${selectedCompany}"]`)?.classList.remove('bg-teal-100');
+                    }
+                    row.classList.add('bg-teal-100');
+                    selectedCompany = companyName;
+                });
+            });
+        }
+
+        function filterData() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const stage = document.getElementById('stageFilter').value;
+            const area = document.getElementById('areaFilter').value;
+
+            const filteredData = companyData.filter(company => {
+                const nameMatch = company['Company Name'].toLowerCase().includes(searchTerm);
+                const stageMatch = stage === 'all' || company['Development Stage'] === stage;
+                const areaMatch = area === 'all' || company['Therapeutic Area Focus'].toLowerCase().includes(area.toLowerCase());
+                return nameMatch && stageMatch && areaMatch;
+            });
+
+            renderTable(filteredData);
+        }
+
+        function showDetailView(companyName) {
+            const company = companyData.find(c => c['Company Name'] === companyName);
+            if (!company) return;
+
+            const placeholder = document.getElementById('detailPlaceholder');
+            const content = document.getElementById('detailContent');
+            
+            placeholder.classList.add('hidden');
+            content.classList.remove('hidden');
+
+            content.innerHTML = `
+                <div class="bg-white p-8 rounded-2xl shadow-sm">
+                    <div class="flex flex-wrap justify-between items-start mb-6">
+                        <div>
+                            <h2 class="text-3xl font-bold text-slate-800">${company['Company Name']}</h2>
+                            <p class="text-slate-500">${company['Headquarters Location']} • Founded ${company['Year Founded']}</p>
+                        </div>
+                        <a href="http://${company['Website']}" target="_blank" rel="noopener noreferrer" class="mt-2 md:mt-0 text-sm bg-teal-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-600 transition-colors">Visit Website ↗</a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2 text-slate-700">AI Platform / Technology</h4>
+                            <p class="text-slate-600">${company['AI Platform / Technology']}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2 text-slate-700">Key Partnerships & Funding</h4>
+                            <p class="text-slate-600">${company['Key Partnerships / Funding Highlights']}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                             <h4 class="text-lg font-semibold mb-2 text-slate-700">Projected Progress (Next 12 Months)</h4>
+                            <p class="text-slate-600">${company['Projected Progress (Next 12 Months)']}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('search').addEventListener('input', filterData);
+            document.getElementById('stageFilter').addEventListener('change', filterData);
+            document.getElementById('areaFilter').addEventListener('change', filterData);
+        }
+
+    </script>
+</body>
+</html>
