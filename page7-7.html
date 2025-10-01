@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan Biologic Drug Out-Licensing Landscape (2015-2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is structured as a single-page dashboard to provide a multi-faceted view of Taiwan's out-licensing deals. It starts with a high-level 'Dashboard' for quick insights and trends using summary cards and charts. Users can then move to the 'Deal Explorer', an interactive table for detailed data filtering and sorting. Contextual information is provided in 'Key Players' and 'Case Studies' sections. This non-linear structure was chosen over a simple report format to empower users to explore the data from different angles—from a broad overview down to specific deal details—facilitating a deeper understanding of the landscape. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Total deals, total value, deal counts/values by year. Goal: Inform/Compare. Viz: Summary cards and Bar Charts (Chart.js). Interaction: Tooltips. Justification: Provides immediate, high-level metrics and visualizes trends over time effectively.
+        - Report Info: Deals by therapeutic area. Goal: Compare proportions. Viz: Donut Chart (Chart.js). Interaction: Tooltips. Justification: Clearly shows the strategic focus areas of Taiwan's biotech industry.
+        - Report Info: Complete chronological list of deals. Goal: Organize/Explore. Viz: Interactive HTML Table. Interaction: Filtering by year and therapeutic area, text search, sorting. Justification: The most powerful tool for users to conduct their own specific analysis on the comprehensive dataset.
+        - Report Info: Detailed deal analyses. Goal: Inform/Analyze. Viz: Accordion-style text sections. Interaction: Click to expand/collapse. Justification: Presents dense narrative information in a digestible, user-controlled manner without cluttering the UI.
+        - Library/Method: All charts are rendered on Canvas using Chart.js to ensure interactivity and avoid static graphics. Core interactivity is handled with vanilla JavaScript. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        .nav-button {
+            transition: all 0.3s;
+        }
+        .nav-button.active {
+            background-color: #A58E74;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        .nav-button:not(.active):hover {
+            background-color: #E9E3DC;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .table-cell {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <header class="bg-white shadow-md sticky top-0 z-10">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col sm:flex-row items-center justify-between py-4">
+                    <h1 class="text-2xl font-bold text-gray-800 text-center sm:text-left">Taiwan Biologic Out-Licensing (2015-2025)</h1>
+                    <nav id="nav-menu" class="flex flex-wrap justify-center gap-2 mt-4 sm:mt-0">
+                        <button data-target="dashboard" class="nav-button active px-4 py-2 rounded-md text-sm font-medium">Dashboard</button>
+                        <button data-target="deal-explorer" class="nav-button px-4 py-2 rounded-md text-sm font-medium">Deal Explorer</button>
+                        <button data-target="key-players" class="nav-button px-4 py-2 rounded-md text-sm font-medium">Key Players</button>
+                        <button data-target="case-studies" class="nav-button px-4 py-2 rounded-md text-sm font-medium">Case Studies</button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div id="dashboard" class="section active">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#4A4A4A] mb-2">Dashboard Overview</h2>
+                    <p class="text-lg text-gray-600">A high-level summary of Taiwan's biologic out-licensing activities from 2015 to 2025.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold text-gray-500">Total Deals</h3>
+                        <p id="total-deals" class="text-4xl font-bold text-[#A58E74] mt-2"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold text-gray-500">Total Disclosed Value</h3>
+                        <p id="total-value" class="text-4xl font-bold text-[#A58E74] mt-2"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold text-gray-500">Top Therapeutic Area</h3>
+                        <p id="top-area" class="text-4xl font-bold text-[#A58E74] mt-2"></p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-semibold text-center mb-4">Deals by Year</h3>
+                        <div class="chart-container">
+                            <canvas id="dealsByYearChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-semibold text-center mb-4">Deals by Therapeutic Area</h3>
+                         <div class="chart-container" style="max-height: 400px; max-width: 400px;">
+                            <canvas id="dealsByAreaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deal-explorer" class="section">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#4A4A4A] mb-2">Deal Explorer</h2>
+                    <p class="text-lg text-gray-600">Search, filter, and sort through all licensing deals from 2015-2025.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label for="year-filter" class="block text-sm font-medium text-gray-700">Year</label>
+                            <select id="year-filter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#A58E74] focus:border-[#A58E74] sm:text-sm rounded-md">
+                                <option>All</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="area-filter" class="block text-sm font-medium text-gray-700">Therapeutic Area</label>
+                            <select id="area-filter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#A58E74] focus:border-[#A58E74] sm:text-sm rounded-md">
+                                <option>All</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                             <label for="search-input" class="block text-sm font-medium text-gray-700">Search</label>
+                             <input type="text" id="search-input" placeholder="Search by company, drug..." class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#A58E74] focus:border-[#A58E74] sm:text-sm">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="year">Year ▼</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="taiwaneseCo">Taiwanese Co.</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="partnerCo">Partner Co.</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Drug/Technology</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="area">Area</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="value">Potential Value (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deals-table-body" class="bg-white divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="key-players" class="section">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#4A4A4A] mb-2">Key Players</h2>
+                    <p class="text-lg text-gray-600">Prominent Taiwanese companies driving out-licensing activities.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">Oneness Biotech</h3>
+                        <p class="text-gray-600">A leader in new drug development for dermatology and immune-oncology. Known for the landmark FB825 deal, one of the highest-value out-licensing agreements for a Taiwanese preclinical asset.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">PharmaEssentia</h3>
+                        <p class="text-gray-600">Known for developing novel drugs for myeloproliferative neoplasms. Its successful out-licensing of Ropeginterferon alfa-2b (Besremi) in multiple regions exemplifies a targeted global partnership strategy.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">PharmaEngine</h3>
+                        <p class="text-gray-600">Focused on oncology drugs, PharmaEngine's success with ONIVYDE is a key example of successful co-development and out-licensing to major global players like Ipsen.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">OBI Pharma</h3>
+                        <p class="text-gray-600">Specializes in innovative cancer immunotherapies, particularly ADCs. Actively seeks global partnerships for its pipeline assets like OBI-999.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">TaiMed Biologics</h3>
+                        <p class="text-gray-600">A prominent player in the HIV treatment space. Its development and commercialization of Trogarzo (ibalizumab-uiyk) involved strategic partnerships for global distribution.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-[#A58E74] mb-3">EirGenix</h3>
+                        <p class="text-gray-600">A leading contract development and manufacturing organization (CDMO) that also develops its own portfolio of biosimilars, particularly in oncology, which it out-licenses to global partners for commercialization.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="case-studies" class="section">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#4A4A4A] mb-2">Impactful Case Studies</h2>
+                    <p class="text-lg text-gray-600">A closer look at significant licensing deals that shaped the decade.</p>
+                </div>
+                <div class="space-y-4" id="case-studies-container">
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dealsData = [
+        { year: 2015, taiwaneseCo: 'PharmaEngine', partnerCo: 'Merrimack/Ipsen', drug: 'ONIVYDE (MM-398)', area: 'Oncology', value: 220000000 },
+        { year: 2015, taiwaneseCo: 'Fountain Biopharma', partnerCo: 'Kyowa Hakko Kirin', drug: 'FOBI-AD2 (Anti-IL-31 mAb)', area: 'Dermatology', value: 15000000 },
+        { year: 2015, taiwaneseCo: 'Medigen Vaccine Biologics', partnerCo: 'US National Institutes of Health (NIH)', drug: 'Dengue Vaccine (TV003)', area: 'Infectious Disease', value: 36000000 },
+        { year: 2016, taiwaneseCo: 'OBI Pharma', partnerCo: 'MPM Capital', drug: 'OBI-822/821 (Adagloxad)', area: 'Oncology', value: 40000000 },
+        { year: 2016, taiwaneseCo: 'Medigen Vaccine Biologics', partnerCo: 'MedImmune (AstraZeneca)', drug: 'Undisclosed mAb', area: 'Infectious Disease', value: null },
+        { year: 2016, taiwaneseCo: 'TaiGen Biotechnology', partnerCo: 'YiChang HEC ChangJiang Pharmaceutical', drug: 'Taigexyn (Nemonoxacin)', area: 'Infectious Disease', value: 50000000 },
+        { year: 2017, taiwaneseCo: 'TaiMed Biologics', partnerCo: 'Theratechnologies', drug: 'Trogarzo (Ibalizumab)', area: 'Infectious Disease', value: 85000000 },
+        { year: 2017, taiwaneseCo: 'JHL Biotech', partnerCo: 'Sanofi', drug: 'Multiple Biosimilars', area: 'Oncology/Autoimmune', value: 236000000 },
+        { year: 2017, taiwaneseCo: 'PharmaEngine', partnerCo: 'Colbond', drug: 'PEP503 (NBTXR3)', area: 'Oncology', value: 56000000 },
+        { year: 2017, taiwaneseCo: 'PharmaEssentia', partnerCo: 'Pint Pharma', drug: 'Ropeginterferon alfa-2b (Besremi)', area: 'Oncology', value: 45000000 },
+        { year: 2018, taiwaneseCo: 'TTY Biopharm', partnerCo: 'Abeona Therapeutics', drug: 'ABO-102 (AAV Gene Therapy)', area: 'Rare Disease', value: 20000000 },
+        { year: 2018, taiwaneseCo: 'Fountain Biopharma', partnerCo: 'CMG Pharmaceutical', drug: 'FOBI-AD2', area: 'Dermatology', value: null },
+        { year: 2018, taiwaneseCo: 'Microbio', partnerCo: 'InteRx', drug: 'Botanical Drug Ca-vir', area: 'Oncology', value: null },
+        { year: 2019, taiwaneseCo: 'EirGenix', partnerCo: 'Sandoz', drug: 'EG12014 (Trastuzumab Biosimilar)', area: 'Oncology', value: 70000000 },
+        { year: 2019, taiwaneseCo: 'Acepodia', partnerCo: 'Janssen Biotech', drug: 'oNK Cell Therapy Platform', area: 'Oncology', value: 281000000 },
+        { year: 2019, taiwaneseCo: 'TLC', partnerCo: '3SBio', drug: 'TLC599', area: 'Autoimmune/Inflammation', value: 83000000 },
+        { year: 2020, taiwaneseCo: 'Oneness Biotech', partnerCo: 'LEO Pharma', drug: 'FB825 (Anti-CεmX mAb)', area: 'Dermatology', value: 570000000 },
+        { year: 2020, taiwaneseCo: 'TLC', partnerCo: 'Incepta Pharmaceuticals', drug: 'Ampholipad (Amphotericin B)', area: 'Infectious Disease', value: null },
+        { year: 2020, taiwaneseCo: 'Senhwa Biosciences', partnerCo: 'Gemseki', drug: 'Silmitasertib', area: 'Oncology', value: null },
+        { year: 2021, taiwaneseCo: 'Golden Biotechnology', partnerCo: 'BNC Korea', drug: 'Antroquinonol (Hocena)', area: 'Infectious Disease', value: 18000000 },
+        { year: 2021, taiwaneseCo: 'OBI Pharma', partnerCo: 'Odeon Therapeutics', drug: 'OBI-999 (ADC)', area: 'Oncology', value: 200000000 },
+        { year: 2021, taiwaneseCo: 'CHO Pharma', partnerCo: 'Sandoz AG', drug: 'Anti-IgE mAb Biosimilar', area: 'Autoimmune/Inflammation', value: null },
+        { year: 2021, taiwaneseCo: 'PharmaEssentia', partnerCo: 'K-Gesundheit', drug: 'Ropeginterferon alfa-2b (Besremi)', area: 'Oncology', value: 125000000 },
+        { year: 2022, taiwaneseCo: 'SynCore Biotechnology', partnerCo: 'Essex Bio-Technology', drug: 'SB05 (ENDO-TAG1)', area: 'Oncology', value: 50000000 },
+        { year: 2022, taiwaneseCo: 'Foresee Pharmaceuticals', partnerCo: 'TRPharm', drug: 'Camcevi (Leuprolide)', area: 'Oncology', value: 50000000 },
+        { year: 2022, taiwaneseCo: 'TWi Biotechnology', partnerCo: 'China Medical System Holdings', drug: 'AC-203', area: 'Dermatology', value: 16000000 },
+        { year: 2023, taiwaneseCo: 'United BioPharma', partnerCo: 'Innovent Biologics', drug: 'UB-421 (Anti-CD4 mAb)', area: 'Infectious Disease', value: 100000000 },
+        { year: 2023, taiwaneseCo: 'Level Biotechnology', partnerCo: 'Gabather', drug: 'LBL-007', area: 'Neurology', value: 115000000 },
+        { year: 2023, taiwaneseCo: 'TTY Biopharm', partnerCo: 'Healthsoar', drug: 'Q-1802 (HER2-targeted ADC)', area: 'Oncology', value: 80000000 },
+        { year: 2023, taiwaneseCo: 'PharmaEssentia', partnerCo: 'Pint Pharma', drug: 'Ropeginterferon alfa-2b (Besremi)', area: 'Oncology', value: 190000000 },
+        { year: 2024, taiwaneseCo: 'Lumosa Therapeutics', partnerCo: 'Shenzhen Salubris Pharmaceuticals', drug: 'LT3001', area: 'Neurology', value: 80000000 },
+        { year: 2024, taiwaneseCo: 'ScinoPharm', partnerCo: 'Undisclosed', drug: 'ADC Payload Technology', area: 'Oncology', value: 60000000 },
+        { year: 2024, taiwaneseCo: 'PharmaEssentia', partnerCo: 'Pint Pharma', drug: 'Besremi (Japan Rights)', area: 'Oncology', value: 100000000 },
+        { year: 2025, taiwaneseCo: 'Taiwan Bio Therapeutics', partnerCo: 'Senectus (Singapore)', drug: 'Chondrochymal', area: 'Autoimmune/Inflammation', value: 30000000 },
+        { year: 2025, taiwaneseCo: 'Formosa Pharmaceuticals', partnerCo: 'Cipla (India)', drug: 'APP13007 (Clobetasol)', area: 'Ophthalmology', value: null },
+        { year: 2025, taiwaneseCo: 'MetaMab Biomedical', partnerCo: 'BioNTech', drug: 'ADC Platform', area: 'Oncology', value: 450000000 },
+        { year: 2025, taiwaneseCo: 'Gongwin Taiwan', partnerCo: 'Undisclosed Companies', drug: 'PTS-302', area: 'Oncology', value: null }
+    ];
+
+    const caseStudiesData = [
+        { 
+            title: "Oneness Biotech & LEO Pharma (2020) - $570M",
+            background: "In 2020, Oneness Biotech executed a landmark deal with Danish dermatology specialist LEO Pharma for its novel monoclonal antibody, FB825. This was a significant validation for Taiwan's biotech industry, representing one of the largest out-licensing deals for a preclinical-stage asset from the region.",
+            structure: "The deal included an upfront payment, milestone payments tied to development, regulatory, and sales targets, and tiered royalties on net sales. The total potential value reached $570 million. LEO Pharma gained exclusive global rights to develop and commercialize the drug for dermatological conditions.",
+            outcome: "The partnership propelled FB825 into global clinical development, leveraging LEO Pharma's expertise in dermatology. It showcased Taiwan's capability to produce first-in-class biologic candidates that can attract major international pharmaceutical partners.",
+            lessons: "This case demonstrates the value of focusing on novel mechanisms of action in globally competitive therapeutic areas. A strong preclinical data package and clear intellectual property were critical to commanding a high valuation."
+        },
+        { 
+            title: "PharmaEssentia's Global Strategy for Besremi",
+            background: "Unlike a single blockbuster deal, PharmaEssentia employed a multi-partner, region-specific licensing strategy for its flagship product, Besremi (Ropeginterferon alfa-2b), for myeloproliferative neoplasms like polycythemia vera. This approach began with early partnerships and expanded over the years.",
+            structure: "The company signed a series of distinct agreements, including with Pint Pharma for Latin America (2017 & 2023) and Japan (2024), and K-Gesundheit for South Korea (2021). Each deal was tailored to the specific market, involving upfront payments, milestones, and royalties.",
+            outcome: "This strategy allowed PharmaEssentia to gradually build a global commercial footprint for Besremi, leveraging local partners' regulatory and marketing expertise. It provided a steady stream of revenue and validation, culminating in approvals and launches in major markets worldwide, including the US and Europe (handled by its own subsidiary).",
+            lessons: "A 'string of pearls' licensing strategy can be highly effective for companies with a strong, de-risked asset. It allows the innovator company to retain more control and upside compared to a single global deal, while still mitigating the risks of global commercialization by partnering with regional experts."
+        },
+        { 
+            title: "Acepodia & Janssen (2019) - $281M",
+            background: "Acepodia's 2019 collaboration with Janssen (a Johnson & Johnson company) centered on its unique Antibody-Cell Conjugation (ACC) platform for developing allogeneic 'off-the-shelf' oNK cell therapies. This deal highlighted Taiwan's emerging strength in next-generation cell therapy technologies.",
+            structure: "The agreement was a research collaboration and license agreement. Acepodia received an upfront payment and equity investment, with eligibility for substantial development and commercial milestones, plus royalties. Janssen gained options to exclusively license candidates developed under the collaboration.",
+            outcome: "The partnership provided Acepodia with significant non-dilutive funding and validation from a global pharma leader. It allowed Janssen to explore a novel modality in cancer immunotherapy, potentially expanding its pipeline with innovative cell therapies derived from Taiwanese technology.",
+            lessons: "This case illustrates the high value placed on innovative platform technologies, not just single assets. For a small biotech, a flexible collaboration structure that includes an equity investment can provide crucial long-term capital and strategic alignment with the partner."
+        }
+    ];
+
+    const navButtons = document.querySelectorAll('.nav-button');
+    const sections = document.querySelectorAll('.section');
+    let dealsByYearChart, dealsByAreaChart;
+
+    function switchTab(targetId) {
+        sections.forEach(section => {
+            section.classList.toggle('active', section.id === targetId);
+        });
+        navButtons.forEach(button => {
+            button.classList.toggle('active', button.dataset.target === targetId);
+        });
+    }
+
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            switchTab(button.dataset.target);
+        });
+    });
+
+    let currentSort = { key: 'year', asc: false };
+    
+    function renderTable(filteredData) {
+        const tableBody = document.getElementById('deals-table-body');
+        tableBody.innerHTML = '';
+        if (filteredData.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4">No deals found.</td></tr>`;
+            return;
+        }
+
+        const sortedData = [...filteredData].sort((a, b) => {
+            let valA = a[currentSort.key];
+            let valB = b[currentSort.key];
+
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA === null) return 1;
+            if (valB === null) return -1;
+            
+            if (valA < valB) return currentSort.asc ? -1 : 1;
+            if (valA > valB) return currentSort.asc ? 1 : -1;
+            return 0;
+        });
+
+        sortedData.forEach(deal => {
+            const row = document.createElement('tr');
+            row.className = "hover:bg-gray-50";
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap table-cell">${deal.year}</td>
+                <td class="px-6 py-4 whitespace-nowrap table-cell font-medium text-gray-900">${deal.taiwaneseCo}</td>
+                <td class="px-6 py-4 whitespace-nowrap table-cell">${deal.partnerCo}</td>
+                <td class="px-6 py-4 table-cell" style="min-width: 150px;">${deal.drug}</td>
+                <td class="px-6 py-4 whitespace-nowrap table-cell">${deal.area}</td>
+                <td class="px-6 py-4 whitespace-nowrap table-cell">${deal.value ? `$${(deal.value / 1000000).toLocaleString()}M` : 'Undisclosed'}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function applyFilters() {
+        const year = document.getElementById('year-filter').value;
+        const area = document.getElementById('area-filter').value;
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+        let filtered = dealsData;
+        if (year !== 'All') {
+            filtered = filtered.filter(d => d.year == year);
+        }
+        if (area !== 'All') {
+            filtered = filtered.filter(d => d.area === area);
+        }
+        if (searchTerm) {
+            filtered = filtered.filter(d => 
+                d.taiwaneseCo.toLowerCase().includes(searchTerm) ||
+                d.partnerCo.toLowerCase().includes(searchTerm) ||
+                d.drug.toLowerCase().includes(searchTerm)
+            );
+        }
+        renderTable(filtered);
+    }
+    
+    function populateFilters() {
+        const yearFilter = document.getElementById('year-filter');
+        const areaFilter = document.getElementById('area-filter');
+        const years = [...new Set(dealsData.map(d => d.year))].sort((a,b) => b-a);
+        const areas = [...new Set(dealsData.map(d => d.area))].sort();
+
+        yearFilter.innerHTML = '<option>All</option>';
+        areaFilter.innerHTML = '<option>All</option>';
+
+        years.forEach(y => {
+            const option = document.createElement('option');
+            option.value = y;
+            option.textContent = y;
+            yearFilter.appendChild(option);
+        });
+        areas.forEach(a => {
+            const option = document.createElement('option');
+            option.value = a;
+            option.textContent = a;
+            areaFilter.appendChild(option);
+        });
+    }
+
+    function initDashboard() {
+        const totalDeals = dealsData.length;
+        const totalValue = dealsData.reduce((sum, deal) => sum + (deal.value || 0), 0);
+        
+        const areaCounts = dealsData.reduce((acc, deal) => {
+            acc[deal.area] = (acc[deal.area] || 0) + 1;
+            return acc;
+        }, {});
+        const topArea = Object.entries(areaCounts).sort((a,b) => b[1] - a[1])[0][0];
+
+        document.getElementById('total-deals').textContent = totalDeals;
+        document.getElementById('total-value').textContent = `$${(totalValue / 1000000000).toFixed(2)}B+`;
+        document.getElementById('top-area').textContent = topArea;
+
+        const dealsByYear = dealsData.reduce((acc, deal) => {
+            acc[deal.year] = (acc[deal.year] || 0) + 1;
+            return acc;
+        }, {});
+        
+        const sortedYears = Object.keys(dealsByYear).sort();
+        const yearLabels = sortedYears;
+        const yearData = sortedYears.map(year => dealsByYear[year]);
+
+        const areaLabels = Object.keys(areaCounts).sort();
+        const areaData = areaLabels.map(label => areaCounts[label]);
+
+        if(dealsByYearChart) dealsByYearChart.destroy();
+        const ctxYear = document.getElementById('dealsByYearChart').getContext('2d');
+        dealsByYearChart = new Chart(ctxYear, {
+            type: 'bar',
+            data: {
+                labels: yearLabels,
+                datasets: [{
+                    label: '# of Deals',
+                    data: yearData,
+                    backgroundColor: '#A58E74',
+                    borderColor: '#8C775D',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, suggestedMax: Math.max(...yearData) + 2 }
+                }
+            }
+        });
+
+        if(dealsByAreaChart) dealsByAreaChart.destroy();
+        const ctxArea = document.getElementById('dealsByAreaChart').getContext('2d');
+        dealsByAreaChart = new Chart(ctxArea, {
+            type: 'doughnut',
+            data: {
+                labels: areaLabels,
+                datasets: [{
+                    label: 'Deals by Area',
+                    data: areaData,
+                    backgroundColor: ['#A58E74', '#C3B099', '#E9E3DC', '#D1C2B0', '#B9A690', '#4A4A4A', '#8c775d', '#6b5b4a', '#bfae9e'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    }
+    
+    function initCaseStudies() {
+        const container = document.getElementById('case-studies-container');
+        container.innerHTML = '';
+        caseStudiesData.forEach((study) => {
+            const element = document.createElement('div');
+            element.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
+            element.innerHTML = `
+                <button class="w-full text-left p-6 flex justify-between items-center focus:outline-none">
+                    <h3 class="text-2xl font-bold text-[#A58E74]">${study.title}</h3>
+                    <span class="transform transition-transform duration-300 text-2xl text-[#A58E74]">&#x25BC;</span>
+                </button>
+                <div class="px-6 pb-6 hidden space-y-3">
+                    <h4 class="text-lg font-semibold mt-2 text-gray-700">Background</h4>
+                    <p class="text-gray-600">${study.background}</p>
+                    <h4 class="text-lg font-semibold mt-2 text-gray-700">Deal Structure</h4>
+                    <p class="text-gray-600">${study.structure}</p>
+                    <h4 class="text-lg font-semibold mt-2 text-gray-700">Outcome & Impact</h4>
+                    <p class="text-gray-600">${study.outcome}</p>
+                    <h4 class="text-lg font-semibold mt-2 text-gray-700">Lessons Learned</h4>
+                    <p class="text-gray-600">${study.lessons}</p>
+                </div>
+            `;
+            const button = element.querySelector('button');
+            const content = element.querySelector('div');
+            const icon = element.querySelector('span');
+
+            button.addEventListener('click', () => {
+                const isVisible = !content.classList.contains('hidden');
+                content.classList.toggle('hidden');
+                icon.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+            container.appendChild(element);
+        });
+    }
+    
+    document.getElementById('year-filter').addEventListener('change', applyFilters);
+    document.getElementById('area-filter').addEventListener('change', applyFilters);
+    document.getElementById('search-input').addEventListener('input', applyFilters);
+
+    document.querySelector('thead').addEventListener('click', (e) => {
+        const th = e.target.closest('th');
+        if (th && th.dataset.sort) {
+            const key = th.dataset.sort;
+            if (currentSort.key === key) {
+                currentSort.asc = !currentSort.asc;
+            } else {
+                currentSort.key = key;
+                currentSort.asc = true;
+            }
+            
+            document.querySelectorAll('th[data-sort]').forEach(header => {
+                header.textContent = header.textContent.replace(/ [▼▲]/, '');
+            });
+            
+            th.textContent += currentSort.asc ? ' ▲' : ' ▼';
+            applyFilters();
+        }
+    });
+
+    initDashboard();
+    populateFilters();
+    applyFilters();
+    initCaseStudies();
+});
+</script>
+</body>
+</html>
