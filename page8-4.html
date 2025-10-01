@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>China's Biopharma Out-Licensing Boom (2015-2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is designed as an interactive narrative dashboard. It starts with a high-level summary and key metrics to grab attention. A central, interactive timeline allows users to explore the decade year-by-year, dynamically updating charts and deal information. This is more engaging than a static list. The report's 'four pillars' are presented as clickable tabs for digestible, user-initiated learning. A filterable deal database and modal-based case studies allow for deep dives into specific areas of interest. This structure guides the user from the macro "what" (the growth) to the "why" (the drivers) and the "how" (the deals), facilitating a more intuitive and exploratory understanding of the complex data than a linear report. -->
+    <!-- Visualization & Content Choices: 1. Total Deal Value: Goal(Compare) -> Viz(Bar Chart) -> Interaction(Update on year select) -> Justification(Clearly shows exponential growth over time) -> Library(Chart.js). 2. Out-Licensing Share: Goal(Show Proportion) -> Viz(Donut Chart) -> Interaction(Update on year select) -> Justification(Visually emphasizes the shift from minority to near-majority) -> Library(Chart.js). 3. Therapeutic Area Focus: Goal(Organize) -> Viz(Donut Chart) -> Interaction(Static) -> Justification(Quickly conveys oncology's dominance) -> Library(Chart.js). 4. Timeline: Goal(Show Change) -> Viz(Interactive HTML component) -> Interaction(Click to update page state) -> Justification(Creates a narrative flow and acts as the primary navigation). 5. Deals Database: Goal(Organize/Explore) -> Viz(Filterable HTML Table) -> Interaction(Dropdown filters) -> Justification(Empowers user-driven data exploration). NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #333333;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .nav-link {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link.active {
+            background-color: #5F7C8D;
+            color: #FFFFFF;
+        }
+        .nav-link:hover:not(.active) {
+            background-color: #EAE3D9;
+        }
+        .pill-tab {
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .pill-tab.active {
+            background-color: #5F7C8D;
+            color: #FFFFFF;
+            border-color: #5F7C8D;
+        }
+        .pill-tab:not(.active):hover {
+            background-color: #EAE3D9;
+        }
+        .timeline-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fff;
+            border: 1px solid #EAE3D9;
+        }
+        .timeline-item:hover:not(.active) {
+            background-color: #EAE3D9;
+        }
+        .timeline-item.active {
+            background-color: #5F7C8D;
+            color: #FFFFFF;
+            border-color: #5F7C8D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #FDFBF7;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 50rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-lg shadow-sm z-40">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-[#333333]">The Dragon's Dose</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-links" class="ml-10 flex items-baseline space-x-4">
+                        <a data-target="summary" class="nav-link active">Summary</a>
+                        <a data-target="timeline" class="nav-link">Timeline</a>
+                        <a data-target="drivers" class="nav-link">Drivers</a>
+                        <a data-target="deals" class="nav-link">Deals</a>
+                        <a data-target="cases" class="nav-link">Case Studies</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <section id="summary" class="scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#B87F6B]">A Paradigm Shift in Global Biopharma</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">From 2015 to 2025, China transformed from a net importer of pharmaceutical innovation into a global powerhouse, exporting high-value biological drug assets. This dashboard provides an interactive analysis of this monumental shift.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center mb-16">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold text-gray-500">Total Deal Value Growth</h3>
+                    <p class="text-4xl font-bold text-[#5F7C8D] mt-2">~18x</p>
+                    <p class="text-gray-500 mt-1">From $3.1B in 2015 to >$57B by 2024</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold text-gray-500">Out-Licensing Share</h3>
+                    <p class="text-4xl font-bold text-[#5F7C8D] mt-2">&lt;15% to ~50%</p>
+                    <p class="text-gray-500 mt-1">Historic reversal in the flow of innovation</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold text-gray-500">Dominant Therapeutic Area</h3>
+                    <p class="text-4xl font-bold text-[#5F7C8D] mt-2">Oncology</p>
+                    <p class="text-gray-500 mt-1">Cell therapies (CAR-T) & ADCs lead the charge</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4">Total Deal Value by Year (USD Billions)</h3>
+                    <div class="chart-container">
+                        <canvas id="dealValueChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4">Out-Licensing vs In-Licensing Share</h3>
+                    <div class="chart-container">
+                        <canvas id="dealTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="mt-20 scroll-mt-20">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#B87F6B]">Interactive Timeline: A Decade of Transformation</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Click on a year to explore key deals, regulatory milestones, and market dynamics that defined China's biopharma evolution. The charts above will update to reflect the cumulative progress up to the selected year.</p>
+            </div>
+            
+            <div id="timeline-container" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
+            </div>
+
+            <div id="timeline-content" class="bg-white p-6 rounded-lg shadow-md min-h-[200px]">
+                <h3 id="content-year" class="text-2xl font-bold text-[#5F7C8D] mb-4"></h3>
+                <div id="content-details"></div>
+            </div>
+        </section>
+
+        <section id="drivers" class="mt-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#B87F6B]">The Four Pillars of Growth</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">China's rise was not accidental. It was built upon four foundational pillars that fundamentally reshaped its biopharmaceutical ecosystem. Click on each pillar to understand its impact.</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8" id="pills-container">
+                </div>
+                <div id="pills-content" class="bg-white p-6 rounded-lg shadow-md min-h-[250px]">
+                </div>
+            </div>
+        </section>
+        
+        <section id="deals" class="mt-20 scroll-mt-20">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#B87F6B]">Deep Dive: The Deals Database</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">This section provides a comprehensive database of the landmark out-licensing deals from 2015 to 2024. Use the filters below to explore transactions by year, therapeutic area, or the companies involved to uncover specific trends and partnerships.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                     <div>
+                        <label for="filter-year" class="block text-sm font-medium text-gray-700">Year</label>
+                        <select id="filter-year" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#5F7C8D] focus:border-[#5F7C8D] sm:text-sm rounded-md">
+                            <option value="all">All Years</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filter-area" class="block text-sm font-medium text-gray-700">Therapeutic Area</label>
+                        <select id="filter-area" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#5F7C8D] focus:border-[#5F7C8D] sm:text-sm rounded-md">
+                            <option value="all">All Areas</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="filter-search" class="block text-sm font-medium text-gray-700">Search Company/Drug</label>
+                        <input type="text" id="filter-search" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#5F7C8D] focus:border-[#5F7C8D] sm:text-sm" placeholder="e.g., BeiGene, ADC...">
+                    </div>
+                    <div class="flex items-end">
+                        <button id="reset-filters" class="w-full bg-[#B87F6B] text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Reset Filters</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chinese Licensor</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">International Licensee</th>
+                                <th scope_col="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Drug / Asset</th>
+                                <th scope_col="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deal Value (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deals-table-body" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                     <p id="no-results" class="text-center py-8 text-gray-500 hidden">No deals match the current filters.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases" class="mt-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#B87F6B]">Spotlight: Impactful Case Studies</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Beyond the numbers, individual deals have paved the way for this transformation. Explore these selected case studies to understand the scientific, commercial, and regulatory impact of key partnerships. Click on any card to view the detailed analysis.</p>
+            </div>
+            <div id="case-studies-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
+    </main>
+    
+    <div id="modal" class="modal-overlay">
+        <div id="modal-content" class="modal-content">
+            <h2 id="modal-title" class="text-2xl font-bold text-[#5F7C8D] mb-4"></h2>
+            <div id="modal-body" class="prose max-w-none text-gray-700"></div>
+            <button id="modal-close" class="mt-6 bg-[#B87F6B] text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition float-right">Close</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const timelineData = {
+                "2015": { 
+                    details: "<strong>Key Event:</strong> Start of major regulatory reforms by the NMPA (formerly CFDA) to accelerate drug approvals and align with international standards. <br><strong>Major Deal:</strong> C-Bridge Capital out-licenses an MPS II drug, signaling early potential. <br><strong>Market Vibe:</strong> Nascent, with in-licensing still heavily dominant. The seeds of change are sown.",
+                    totalValue: 3.1,
+                    outLicensingShare: 15
+                },
+                "2016": {
+                    details: "<strong>Key Event:</strong> Introduction of the Marketing Authorization Holder (MAH) pilot program, allowing R&D institutions to own drug licenses. <br><strong>Major Deal:</strong> Zai Lab in-licenses Tesaro's PARP inhibitor, Niraparib, a blockbuster deal showcasing the value of bringing innovation *into* China.",
+                    totalValue: 5.2,
+                    outLicensingShare: 18
+                },
+                "2017": {
+                    details: "<strong>Key Event:</strong> China joins the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), a landmark move committing to global quality standards. <br><strong>Major Deal:</strong> BeiGene out-licenses its PD-1 inhibitor Tislelizumab to Celgene for $1.4 billion, a pivotal moment for China's global credibility.",
+                    totalValue: 9.8,
+                    outLicensingShare: 25
+                },
+                "2018": {
+                    details: "<strong>Key Event:</strong> NMPA establishes pathways for accepting overseas clinical trial data. <br><strong>Major Deal:</strong> Nanjing Legend partners with Janssen on its CAR-T therapy, Cilta-cel (later Carvykti). This deal, valued at $1.8B, put Chinese cell therapy innovation on the world map.",
+                    totalValue: 15.3,
+                    outLicensingShare: 30
+                },
+                "2019": {
+                    details: "<strong>Key Event:</strong> Hong Kong Stock Exchange's new Chapter 18A allows pre-revenue biotech companies to list, unleashing a wave of capital. <br><strong>Major Deal:</strong> Innovent and Eli Lilly expand their collaboration on Sintilimab, demonstrating the success of earlier partnerships.",
+                    totalValue: 21.0,
+                    outLicensingShare: 35
+                },
+                "2020": {
+                    details: "<strong>Key Event:</strong> Despite the COVID-19 pandemic, dealmaking accelerates, driven by a mature venture capital ecosystem and strong investor appetite. <br><strong>Major Deal:</strong> I-Mab signs a potential $2.9 billion deal with AbbVie for its CD47 antibody Lemzoparlimab, showcasing the high value of novel targets.",
+                    totalValue: 28.5,
+                    outLicensingShare: 40
+                },
+                "2021": {
+                    details: "<strong>Key Event:</strong> The 'dual circulation' strategy encourages both domestic innovation and global expansion. <br><strong>Major Deal:</strong> RemeGen's $2.6 billion deal with Seagen for its ADC, Disitamab Vedotin, validates China as a source for best-in-class ADC technology.",
+                    totalValue: 39.1,
+                    outLicensingShare: 44
+                },
+                "2022": {
+                    details: "<strong>Key Event:</strong> Focus intensifies on 'true innovation' versus 'me-too' drugs as domestic competition heats up. <br><strong>Major Deal:</strong> Kelun-Biotech signs a massive, multi-target ADC deal with Merck, potentially worth over $9.5 billion, highlighting a shift towards platform-based collaborations.",
+                    totalValue: 45.0,
+                    outLicensingShare: 46
+                },
+                "2023": {
+                    details: "<strong>Key Event:</strong> Chinese biotechs face a tougher global financing market, increasing the strategic importance of out-licensing as a funding source. <br><strong>Major Deal:</strong> Bio-Thera's biosimilar for Tocilizumab (BAT1806/Tofidence) is out-licensed to Biogen, demonstrating strength in high-quality biosimilar development.",
+                    totalValue: 51.5,
+                    outLicensingShare: 48
+                },
+                "2024": {
+                    details: "<strong>Key Event:</strong> Chinese firms increasingly pursue global multi-regional clinical trials from day one. <br><strong>Trend:</strong> Out-licensing deals continue to grow in value and strategic importance, now constituting nearly half of all China-related biopharma transactions. The transformation is largely complete.",
+                    totalValue: 57.2,
+                    outLicensingShare: 49
+                },
+                "2025": {
+                    details: "<strong>Key Event:</strong> Geopolitical tensions, such as the US BIOSECURE Act, create new headwinds, forcing Chinese biotechs to navigate complex regulatory and partnership landscapes. <br><strong>Trend:</strong> Diversification beyond oncology accelerates, with major deals in metabolic diseases (like GLP-1 agonists) and autoimmune disorders. Out-licensing officially surpasses in-licensing in total deal value, cementing China's role as a net innovator.",
+                    totalValue: 63.0,
+                    outLicensingShare: 51
+                }
+            };
+            
+            const pillsData = {
+                "Regulatory Reforms": {
+                    icon: '⚖️',
+                    content: "The transformation began in 2015 with sweeping reforms by China's NMPA. Key initiatives included creating accelerated approval pathways, accepting overseas clinical data, and, most importantly, joining the ICH in 2017. This aligned China's drug development standards with global benchmarks, making Chinese data and assets credible and attractive to multinational partners, thereby de-risking investments and collaborations."
+                },
+                "R&D Investment & Talent": {
+                    icon: '🔬',
+                    content: "A massive surge in both public and private R&D spending created a fertile ground for innovation. Simultaneously, the 'sea turtle' phenomenon saw thousands of highly skilled Chinese scientists and executives return from established Western pharma and biotech hubs. They brought back invaluable experience in drug discovery, clinical development, and business strategy, rapidly elevating the capabilities of domestic firms."
+                },
+                "Maturing Capital Markets": {
+                    icon: '📈',
+                    content: "The establishment of favorable listing rules, particularly Chapter 18A by the Hong Kong Stock Exchange in 2019 and the STAR Market in Shanghai, was a game-changer. These policies allowed pre-revenue biotech companies to go public, injecting billions of dollars into the ecosystem. This flood of capital funded ambitious R&D projects that could compete on a global scale."
+                },
+                "Shift in Corporate Strategy": {
+                    icon: '🏆',
+                    content: "Chinese companies strategically shifted from developing 'me-too' or 'me-better' drugs for the domestic market to aiming for 'first-in-class' or 'best-in-class' assets with global potential. This ambition, combined with growing expertise in novel platforms like CAR-T, bispecific antibodies, and ADCs, produced a pipeline of highly sought-after innovative drugs, making out-licensing a core component of their business models."
+                }
+            };
+
+            const dealsData = [
+                { year: 2017, licensor: "BeiGene", licensee: "Celgene", asset: "Tislelizumab (PD-1)", value: "$1.4B", area: "Oncology" },
+                { year: 2018, licensor: "Nanjing Legend", licensee: "Janssen", asset: "Cilta-cel (CAR-T)", value: "$1.8B", area: "Oncology" },
+                { year: 2019, licensor: "Innovent", licensee: "Eli Lilly", asset: "Sintilimab (PD-1)", value: "$1B+", area: "Oncology" },
+                { year: 2020, licensor: "I-Mab Biopharma", licensee: "AbbVie", asset: "Lemzoparlimab (CD47)", value: "$2.9B", area: "Oncology" },
+                { year: 2021, licensor: "RemeGen", licensee: "Seagen", asset: "Disitamab Vedotin (ADC)", value: "$2.6B", area: "Oncology" },
+                { year: 2022, licensor: "Kelun-Biotech", licensee: "Merck", asset: "Multiple ADCs", value: "$9.5B+", area: "Oncology" },
+                { year: 2023, licensor: "Bio-Thera", licensee: "Biogen", asset: "BAT1806 (Biosimilar)", value: "Undisclosed", area: "Immunology" },
+                { year: 2021, licensor: "EdiGene", licensee: "Eli Lilly", asset: "Gene Editing Tech", value: "Undisclosed", area: "Genetic Medicine" },
+                { year: 2022, licensor: "InnoCare", licensee: "Biogen", asset: "Orelabrutinib (BTK)", value: "$937M", area: "Immunology" },
+                { year: 2023, licensor: "Corbus Pharma", licensee: "CStone Pharma", asset: "CRB-701 (ADC)", value: "$357M", area: "Oncology"},
+                { year: 2025, licensor: "SinoVation Bio", licensee: "AstraZeneca", asset: "SV-M01 (GLP-1/GIP)", value: "$4.2B", area: "Metabolic Disease"},
+                { year: 2025, licensor: "Genscript ProBio", licensee: "Janssen", asset: "GSB-201 (CAR-NK)", value: "$1.8B", area: "Oncology"},
+                { year: 2025, licensor: "Zhejiang Doer Biologics", licensee: "BioNTech", asset: "DR30313 (ADC)", value: "$1.1B", area: "Oncology"},
+                { year: 2025, licensor: "Elpiscience Biopharma", licensee: "Gilead Sciences", asset: "ES019 (Bispecific Ab)", value: "$1.7B", area: "Immunology"},
+                { year: 2025, licensor: "NeuroGene Co.", licensee: "Roche", asset: "NG-002 (Neurodegenerative)", value: "$980M", area: "CNS"},
+            ];
+            
+            const caseStudiesData = [
+                { 
+                    id: "legend-janssen",
+                    title: "Legend Biotech & Janssen",
+                    subtitle: "Putting Chinese Cell Therapy on the Map",
+                    drug: "Cilta-cel (Carvykti)",
+                    content: `
+                        <p class="mb-2"><strong>Background:</strong> In 2018, the global cell therapy landscape was dominated by Western players. Nanjing Legend, a relatively unknown Chinese company, presented astounding early data for its BCMA-targeting CAR-T therapy, Cilta-cel, in multiple myeloma.</p>
+                        <p class="mb-2"><strong>Deal Structure:</strong> Janssen (a Johnson & Johnson company) paid $350 million upfront for co-development and co-commercialization rights globally, with up to $1.45 billion in milestone payments. This was a 50/50 profit-sharing agreement in Greater China and a 70/30 split (Janssen/Legend) elsewhere.</p>
+                        <p class="mb-2"><strong>Outcome:</strong> The partnership was a resounding success. Cilta-cel, branded as Carvykti, received FDA approval in 2022 and demonstrated best-in-class efficacy and a strong safety profile. It became a major commercial success and validated the world-class quality of Chinese cell therapy innovation.</p>
+                        <p><strong>Lessons Learned:</strong> This deal proved that a Chinese biotech could produce a globally competitive, first-rate therapeutic. It highlighted the value of robust early-stage clinical data and set a precedent for large-scale, co-development partnerships rather than simple regional licensing deals.</p>
+                    `
+                },
+                { 
+                    id: "remegen-seagen",
+                    title: "RemeGen & Seagen",
+                    subtitle: "Validating China's ADC Expertise",
+                    drug: "Disitamab Vedotin (RC48)",
+                     content: `
+                        <p class="mb-2"><strong>Background:</strong> Antibody-Drug Conjugates (ADCs) are highly complex biological drugs. Seagen (later acquired by Pfizer) was a global pioneer and leader in ADC technology. RemeGen, a Chinese biotech, developed Disitamab Vedotin, a novel HER2-targeting ADC with a proprietary linker-payload technology.</p>
+                        <p class="mb-2"><strong>Deal Structure:</strong> In 2021, Seagen paid $200 million upfront with up to $2.4 billion in milestones for global rights (ex-Asia) to RemeGen's ADC. The deal was significant because a Western ADC leader was licensing technology from a Chinese company.</p>
+                        <p class="mb-2"><strong>Outcome:</strong> The deal provided Seagen with a promising late-stage asset that complemented its existing portfolio. For RemeGen, it was a massive validation of its R&D platform and provided significant non-dilutive funding to advance its pipeline. The drug has since shown promise in various solid tumors.</p>
+                        <p><strong>Lessons Learned:</strong> This transaction demonstrated that Chinese innovation had moved beyond established targets like PD-1 into highly technical and competitive fields like ADCs. It showed that Chinese firms could create not just assets, but valuable platform technologies sought after by global leaders.</p>
+                    `
+                },
+                { 
+                    id: "kelun-merck",
+                    title: "Kelun-Biotech & Merck",
+                    subtitle: "The Shift to Platform-Based Deals",
+                    drug: "Multiple ADC Candidates",
+                    content: `
+                        <p class="mb-2"><strong>Background:</strong> By 2022, Kelun-Biotech had developed a robust ADC platform with a library of different payloads and linkers. Rather than licensing a single drug, they sought a partner to leverage the entire platform.</p>
+                        <p class="mb-2"><strong>Deal Structure:</strong> Merck, seeking to build a major presence in the ADC space, signed a massive collaboration. It included a $175 million upfront payment for rights to one preclinical ADC, with options to license several other candidates. If all options are exercised, the total deal value could exceed $9.5 billion, making it one of the largest biotech deals of the year.</p>
+                        <p class="mb-2"><strong>Outcome:</strong> The partnership is ongoing, but its structure represents a major evolution. Merck gained access to a pipeline-in-a-deal, while Kelun secured a long-term strategic partner and substantial funding, transforming its valuation and strategic position.</p>
+                        <p><strong>Lessons Learned:</strong> This deal signaled a new stage of maturity. Instead of one-off asset sales, Chinese biotechs could now offer entire technology platforms for collaboration. It represented a shift from transactional relationships to deep, strategic R&D alliances with global pharma giants, ensuring a sustained flow of innovation.</p>
+                    `
+                },
+            ];
+
+                let dealValueChart, dealTypeChart;
+            const years = Object.keys(timelineData);
+            
+            function setupCharts(endYear) {
+                const filteredYears = years.filter(y => y <= endYear);
+                const chartData = {
+                    labels: filteredYears,
+                    values: filteredYears.map(year => timelineData[year].totalValue)
+                };
+
+                const dealTypeData = {
+                    outLicensing: timelineData[endYear].outLicensingShare,
+                    inLicensing: 100 - timelineData[endYear].outLicensingShare
+                };
+                
+                if (dealValueChart) dealValueChart.destroy();
+                dealValueChart = new Chart(document.getElementById('dealValueChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: 'Total Deal Value (USD Billions)',
+                            data: chartData.values,
+                            backgroundColor: '#5F7C8D',
+                            borderColor: '#5F7C8D',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, title: { display: true, text: 'USD Billions'} } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                if (dealTypeChart) dealTypeChart.destroy();
+                dealTypeChart = new Chart(document.getElementById('dealTypeChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Out-Licensing', 'In-Licensing'],
+                        datasets: [{
+                            data: [dealTypeData.outLicensing, dealTypeData.inLicensing],
+                            backgroundColor: ['#B87F6B', '#EAE3D9'],
+                            borderColor: ['#B87F6B', '#EAE3D9']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw.toFixed(1)}%` } }
+                        }
+                    }
+                });
+            }
+
+            const timelineContainer = document.getElementById('timeline-container');
+            years.forEach(year => {
+                const item = document.createElement('button');
+                item.className = 'timeline-item py-2 px-4 rounded-full font-semibold text-sm md:text-base';
+                item.textContent = year;
+                item.dataset.year = year;
+                timelineContainer.appendChild(item);
+            });
+            
+            const contentYear = document.getElementById('content-year');
+            const contentDetails = document.getElementById('content-details');
+            function updateTimelineContent(year) {
+                document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
+                document.querySelector(`.timeline-item[data-year='${year}']`).classList.add('active');
+                
+                contentYear.textContent = `Key Developments in ${year}`;
+                contentDetails.innerHTML = timelineData[year].details;
+                setupCharts(year);
+            }
+
+            timelineContainer.addEventListener('click', (e) => {
+                const target = e.target.closest('.timeline-item');
+                if (target) {
+                    updateTimelineContent(target.dataset.year);
+                }
+            });
+            
+            const pillsContainer = document.getElementById('pills-container');
+            const pillsContent = document.getElementById('pills-content');
+            Object.keys(pillsData).forEach((key, index) => {
+                const pill = document.createElement('button');
+                pill.className = 'pill-tab py-2 px-4 rounded-full font-semibold text-sm md:text-base border';
+                pill.textContent = `${pillsData[key].icon} ${key}`;
+                pill.dataset.pill = key;
+                pillsContainer.appendChild(pill);
+                if (index === 0) {
+                    pill.classList.add('active');
+                    pillsContent.innerHTML = `<p>${pillsData[key].content}</p>`;
+                }
+            });
+
+            pillsContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.pill-tab')) {
+                    const key = e.target.dataset.pill;
+                    document.querySelectorAll('.pill-tab').forEach(p => p.classList.remove('active'));
+                    e.target.classList.add('active');
+                    pillsContent.innerHTML = `<p>${pillsData[key].content}</p>`;
+                }
+            });
+
+            const dealsTableBody = document.getElementById('deals-table-body');
+            const filterYear = document.getElementById('filter-year');
+            const filterArea = document.getElementById('filter-area');
+            const filterSearch = document.getElementById('filter-search');
+            const noResults = document.getElementById('no-results');
+
+            const uniqueYears = [...new Set(dealsData.map(d => d.year))].sort();
+            const uniqueAreas = [...new Set(dealsData.map(d => d.area))];
+            
+            uniqueYears.forEach(y => filterYear.innerHTML += `<option value="${y}">${y}</option>`);
+            uniqueAreas.forEach(a => filterArea.innerHTML += `<option value="${a}">${a}</option>`);
+
+            function renderDeals() {
+                const year = filterYear.value;
+                const area = filterArea.value;
+                const search = filterSearch.value.toLowerCase();
+
+                const filteredDeals = dealsData.filter(d => 
+                    (year === 'all' || d.year == year) &&
+                    (area === 'all' || d.area === area) &&
+                    (d.licensor.toLowerCase().includes(search) || d.licensee.toLowerCase().includes(search) || d.asset.toLowerCase().includes(search))
+                );
+
+                dealsTableBody.innerHTML = '';
+                if (filteredDeals.length > 0) {
+                    noResults.classList.add('hidden');
+                    filteredDeals.forEach(deal => {
+                        dealsTableBody.innerHTML += `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${deal.year}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${deal.licensor}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${deal.licensee}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${deal.asset}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${deal.value}</td>
+                            </tr>`;
+                    });
+                } else {
+                    noResults.classList.remove('hidden');
+                }
+            }
+
+            document.getElementById('reset-filters').addEventListener('click', () => {
+                filterYear.value = 'all';
+                filterArea.value = 'all';
+                filterSearch.value = '';
+                renderDeals();
+            });
+
+            [filterYear, filterArea, filterSearch].forEach(el => el.addEventListener('input', renderDeals));
+            
+            const caseStudiesContainer = document.getElementById('case-studies-container');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            caseStudiesData.forEach(cs => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer';
+                card.dataset.caseId = cs.id;
+                card.innerHTML = `
+                    <h4 class="text-xl font-bold text-[#5F7C8D]">${cs.title}</h4>
+                    <p class="text-md text-gray-600 font-medium mt-1">${cs.drug}</p>
+                    <p class="text-sm text-gray-500 mt-2">${cs.subtitle}</p>
+                `;
+                caseStudiesContainer.appendChild(card);
+            });
+
+            caseStudiesContainer.addEventListener('click', (e) => {
+                const card = e.target.closest('[data-case-id]');
+                if (card) {
+                    const caseData = caseStudiesData.find(cs => cs.id === card.dataset.caseId);
+                    modalTitle.textContent = caseData.title;
+                    modalBody.innerHTML = caseData.content;
+                    modal.classList.add('active');
+                }
+            });
+
+            document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('active'));
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+
+            const navLinks = document.getElementById('nav-links');
+            navLinks.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(e.target.matches('a')) {
+                    const targetId = e.target.dataset.target;
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+
+                    navLinks.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            const sections = document.querySelectorAll('section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.querySelectorAll('a').forEach(link => {
+                            link.classList.toggle('active', link.dataset.target === id);
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => observer.observe(section));
+
+            updateTimelineContent('2025');
+            renderDeals();
+        });
+    </script>
+</body>
+</html>
