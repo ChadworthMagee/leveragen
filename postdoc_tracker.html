@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharma Postdoc & Fellowship Tracker</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #eef2f5;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .filter-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #1a252f;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Tags for Program Type */
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .tag-phd { background-color: #e3f2fd; color: #1565c0; }
+        .tag-pharmd { background-color: #e8f5e9; color: #2e7d32; }
+        .tag-hybrid { background-color: #fff3e0; color: #ef6c00; }
+
+        /* Button Style */
+        .btn-link {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background-color: #2980b9;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💊 Pharma Postdoc & Fellowship Finder</h1>
+    <p>Use the search bar to find companies or filter by program type (PhD vs. PharmD).</p>
+
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by Company Name..." onkeyup="filterTable()">
+        </div>
+        <div class="filter-box">
+            <select id="typeFilter" onchange="filterTable()">
+                <option value="all">All Program Types</option>
+                <option value="Research Postdoc (PhD)">Research Postdoc (PhD)</option>
+                <option value="PharmD Fellowship">PharmD Fellowship</option>
+            </select>
+        </div>
+        <div class="filter-box">
+            <select id="timingFilter" onchange="filterTable()">
+                <option value="all">All Deadlines</option>
+                <option value="Rolling">Rolling Admissions</option>
+                <option value="Cohort">Fixed Cohort / Deadline</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="programTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Company ⬍</th>
+                    <th onclick="sortTable(1)">Program Type ⬍</th>
+                    <th>Application Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+        <div id="noResults" class="no-results" style="display: none;">No programs match your criteria.</div>
+    </div>
+</div>
+
+<script>
+    // Data Source
+    const programs = [
+        { company: "Regeneron", type: "Research Postdoc (PhD)", time: "Annual Cohort: Applications open Oct 1 – Nov 21 (Strict deadline)", link: "https://www.regeneron.com/responsibility/fueling-stem-innovators/postdoctoral-training-program" },
+        { company: "Biogen", type: "Postdoc & Fellowship (PhD/PharmD)", time: "Annual Cohort: Applications Jan 1 – March 31. Program starts in July.", link: "https://www.biogen.com/careers/students-and-graduates/phd-fellowship.html" },
+        { company: "Genentech (Roche)", type: "Research Postdoc (PhD)", time: "Hybrid: Mostly Rolling. Occasional Postdoc Hiring Initiatives in Summer (July).", link: "https://www.gene.com/careers/university-and-early-career/postdocs" },
+        { company: "AstraZeneca", type: "Research Postdoc (PhD)", time: "Hybrid: Mostly Rolling. R&D Postdoctoral Challenge often has a May/June deadline.", link: "https://careers.astrazeneca.com/postdocs-astrazeneca" },
+        
+        // UPDATED LINK FOR NOVARTIS BELOW
+        { company: "Novartis (NIBR)", type: "Discovery Postdoc (PhD)", time: "Rolling: Positions posted as they become available.", link: "https://www.novartis.com/us-en/careers/early-talent" },
+        
+        { company: "Pfizer", type: "R&D Postdoc (PhD)", time: "Rolling: Search 'Postdoctoral Fellow' on careers site. 'Pfizer Futures' recruits in Fall.", link: "https://www.pfizer.com/en/about/careers/postdoctoral-program" },
+        { company: "Merck (MSD)", type: "Research Laboratories (PhD)", time: "Rolling: Positions posted as 'Postdoctoral Research Fellow' jobs year-round.", link: "https://www.merck.com/research/postdoctoral-research-fellows-program/" },
+        { company: "Eli Lilly", type: "Postdoctoral Scientist (PhD)", time: "Rolling: Search 'Post Doctoral Scientist' on careers site.", link: "https://careers.lilly.com/" },
+        { company: "AbbVie", type: "Research Postdoc (PhD)", time: "Rolling / Seasonal: New positions often released in Spring, but can be year-round.", link: "https://www.abbvie.com/join-us/postdoctoral-program.html" },
+        { company: "Gilead Sciences", type: "Research Postdoc (PhD)", time: "Rolling: Apply to specific requisitions as they open.", link: "https://www.gilead.com/careers/opportunities/early-career-opportunities/postdoctoral-fellowships" },
+        { company: "Amgen", type: "Research Postdoc (PhD)", time: "Rolling: Positions posted individually on careers page.", link: "https://careers.amgen.com/" },
+        { company: "GSK", type: "R&D Postdoc (PhD)", time: "Rolling: Typically posted as specific project vacancies.", link: "https://www.gsk.com/en-gb/careers/early-careers/post-graduate-opportunities/" },
+        { company: "Johnson & Johnson", type: "R&D Postdoc (PhD)", time: "Rolling: Posted as jobs.", link: "https://www.jnj.com/careers" },
+        { company: "Sanofi", type: "R&D Postdoc (PhD)", time: "Rolling: Posted as jobs.", link: "https://jobs.sanofi.com/en/usa-early-careers" },
+        { company: "Boehringer Ingelheim", type: "Research Postdoc (PhD)", time: "Rolling / Specific Grants: Some specific grant calls have Jan/Feb deadlines.", link: "https://www.boehringer-ingelheim.com/science-innovation/human-health-innovation/postdoctoral-research-program" },
+        { company: "Takeda", type: "PharmD Fellowship", time: "Fall Cycle (Strict): Priority deadline usually Oct 31. Interviews in Dec.", link: "https://jobs.takeda.com/fellowship-programs" },
+        { company: "Vertex", type: "PharmD Fellowship", time: "Fall Cycle (Strict): Priority deadline usually Oct 31. Recruits via Northeastern University.", link: "https://www.vrtx.com/careers/career-growth-and-opportunities/vertex-pharmd-fellows/" },
+        { company: "Moderna", type: "PharmD Fellowship", time: "Fall Cycle (Strict): Deadline usually Late Nov. Interviews at ASHP Midyear (Dec).", link: "https://careers.modernatx.com/" },
+        { company: "Bristol Myers Squibb", type: "PharmD Fellowship", time: "Fall Cycle (Strict): Applications usually Sept 1 – Oct 1.", link: "https://careers.bms.com/advanced-degree-programs" }
+    ];
+
+    const tableBody = document.getElementById('tableBody');
+    const noResults = document.getElementById('noResults');
+
+    function getTagClass(type) {
+        if (type.includes("PhD")) return "tag-phd";
+        if (type.includes("PharmD")) return "tag-pharmd";
+        return "tag-hybrid";
+    }
+
+    function renderTable(data) {
+        tableBody.innerHTML = '';
+        if (data.length === 0) {
+            noResults.style.display = 'block';
+            return;
+        } else {
+            noResults.style.display = 'none';
+        }
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            
+            // Format time for highlighting strict deadlines
+            let timeDisplay = item.time;
+            if(item.time.includes("Strict")) {
+                timeDisplay = `<strong>${item.time}</strong>`;
+            }
+
+            row.innerHTML = `
+                <td style="font-weight:bold;">${item.company}</td>
+                <td><span class="tag ${getTagClass(item.type)}">${item.type}</span></td>
+                <td>${timeDisplay}</td>
+                <td><a href="${item.link}" target="_blank" class="btn-link">Visit Website</a></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function filterTable() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('typeFilter').value;
+        const timingFilter = document.getElementById('timingFilter').value;
+
+        const filtered = programs.filter(item => {
+            // Text Search
+            const matchesSearch = item.company.toLowerCase().includes(searchText);
+            
+            // Type Filter
+            let matchesType = true;
+            if (typeFilter !== 'all') {
+                if (typeFilter === 'Research Postdoc (PhD)') matchesType = item.type.includes("PhD");
+                else if (typeFilter === 'PharmD Fellowship') matchesType = item.type.includes("PharmD") || item.type.includes("Fellowship");
+            }
+
+            // Timing Filter
+            let matchesTiming = true;
+            if (timingFilter !== 'all') {
+                if (timingFilter === 'Rolling') matchesTiming = item.time.toLowerCase().includes("rolling");
+                else if (timingFilter === 'Cohort') matchesTiming = !item.time.toLowerCase().includes("rolling");
+            }
+
+            return matchesSearch && matchesType && matchesTiming;
+        });
+
+        renderTable(filtered);
+    }
+
+    function sortTable(n) {
+        // Simple bubble sort for column headers
+        let rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        const table = document.getElementById("programTable");
+        switching = true;
+        dir = "asc"; 
+        
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount ++;      
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    // Initial Render
+    renderTable(programs);
+
+</script>
+
+</body>
+</html>
